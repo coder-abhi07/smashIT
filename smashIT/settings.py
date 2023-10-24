@@ -76,12 +76,12 @@ WSGI_APPLICATION = 'smashIT.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': '65fage+++A5a-+g*5deeA65+G+DF2BGc',
-        'HOST': 'monorail.proxy.rlwy.net',
-        'PORT': '50571',
+        'ENGINE': 'django.db.backends.sqlite3', #django.db.backends.postgresql
+        'NAME': 'db.sqlite3', #railway
+        'USER': '', #postgres
+        'PASSWORD': '', #65fage+++A5a-+g*5deeA65+G+DF2BGc
+        'HOST': '', #monorail.proxy.rlwy.net
+        'PORT': '', #50571
     }
 }
 
