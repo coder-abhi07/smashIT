@@ -174,7 +174,6 @@ pynput==1.7.6
 pyocr==0.8.3
 pyOpenSSL==23.2.0
 pyparsing==2.4.7
-pywin32==*
 PyPDF2==3.0.1
 pyperclip==1.8.2
 pypng==0.0.21
