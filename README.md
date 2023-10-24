@@ -1,2 +1,2 @@
 # smashIT
-nothing to say
+www.smashit.tech
