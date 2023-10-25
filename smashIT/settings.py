@@ -74,17 +74,32 @@ WSGI_APPLICATION = 'smashIT.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', #django.db.backends.postgresql
-        'NAME': 'db.sqlite3', #railway
-        'USER': '', #postgres
-        'PASSWORD': '', #65fage+++A5a-+g*5deeA65+G+DF2BGc
-        'HOST': '', #monorail.proxy.rlwy.net
-        'PORT': '', #50571
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3', #django.db.backends.postgresql
+#         'NAME': 'db.sqlite3', #railway
+#         'USER': '', #postgres
+#         'PASSWORD': '', #65fage+++A5a-+g*5deeA65+G+DF2BGc
+#         'HOST': '', #monorail.proxy.rlwy.net
+#         'PORT': '', #50571
+#     }
+# }
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -120,7 +135,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS=[
@@ -128,6 +142,9 @@ STATICFILES_DIRS=[
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
