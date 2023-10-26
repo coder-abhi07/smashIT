@@ -1,16 +1,9 @@
 from django.shortcuts import render
 from .models import MyForm
-
 from django.conf import settings
 import requests
-import pandas as pd
-import numpy as np
-from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import cluster
-import nltk
-
 
 import json
 from authlib.integrations.django_client import OAuth
@@ -20,13 +13,9 @@ from django.urls import reverse
 from urllib.parse import quote_plus, urlencode
 
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.cluster import AffinityPropagation
-
-# import hdbscan
+import hdbscan
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer
 import nltk
 
 # Download NLTK stopwords data
