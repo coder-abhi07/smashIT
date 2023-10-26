@@ -2,8 +2,8 @@ from django.shortcuts import render
 from .models import MyForm
 from django.conf import settings
 import requests
-from nltk.stem import PorterStemmer
-from nltk.corpus import stopwords
+# from nltk.stem import PorterStemmer
+# from nltk.corpus import stopwords
 
 import json
 from authlib.integrations.django_client import OAuth
@@ -14,19 +14,19 @@ from urllib.parse import quote_plus, urlencode
 
 
 #import hdbscan
-from sklearn.feature_extraction.text import CountVectorizer
-from nltk.corpus import stopwords
-import nltk
+# from sklearn.feature_extraction.text import CountVectorizer
+# from nltk.corpus import stopwords
+# import nltk
 
 # Download NLTK stopwords data
 # nltk.download('stopwords')
 
 
-stemmer = PorterStemmer()
-sw = stopwords.words('english')
+# stemmer = PorterStemmer()
+# sw = stopwords.words('english')
 
-def tokenizer(keyword):
-    return [stemmer.stem(w) for w in keyword.split()]
+# def tokenizer(keyword):
+#     return [stemmer.stem(w) for w in keyword.split()]
 
 oauth = OAuth()
 
@@ -111,36 +111,36 @@ def logout(request):
         ),
     )
 
-def result11(request):
-    if request.method == 'POST':
-        form = MyForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Get the text from the form (file or textarea)
-            questions_text = form.cleaned_data['my_textarea']
-            # Tokenize the input questions
-            questions = questions_text.split("\n")  # Assuming questions are separated by newlines
+# def result11(request):
+#     if request.method == 'POST':
+#         form = MyForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             # Get the text from the form (file or textarea)
+#             questions_text = form.cleaned_data['my_textarea']
+#             # Tokenize the input questions
+#             questions = questions_text.split("\n")  # Assuming questions are separated by newlines
             
-            # Vectorize the questions (you may use more advanced techniques here)
-            # For this example, we're using simple Bag of Words (BoW) vectorization.
-            vectorizer = CountVectorizer()
-            X = vectorizer.fit_transform(questions)
-            X = X.toarray()
+#             # Vectorize the questions (you may use more advanced techniques here)
+#             # For this example, we're using simple Bag of Words (BoW) vectorization.
+#             vectorizer = CountVectorizer()
+#             X = vectorizer.fit_transform(questions)
+#             X = X.toarray()
 
-            # Apply HDBSCAN clustering
-            clusterer = hdbscan.HDBSCAN(min_cluster_size=3)
-            labels = clusterer.fit_predict(X)
+#             # Apply HDBSCAN clustering
+#             clusterer = hdbscan.HDBSCAN(min_cluster_size=3)
+#             labels = clusterer.fit_predict(X)
 
-            # Organize questions into clusters
-            clusters = {}
-            for label, question in zip(labels, questions):
-                if label in clusters:
-                    clusters[label].append(question)
-                else:
-                    clusters[label] = [question]
+#             # Organize questions into clusters
+#             clusters = {}
+#             for label, question in zip(labels, questions):
+#                 if label in clusters:
+#                     clusters[label].append(question)
+#                 else:
+#                     clusters[label] = [question]
 
-            return render(request, "result.html", 
-                          context={
-                              "session": request.session.get("user"),
-                              "pretty": json.dumps(request.session.get("user"), indent=4),
-                              'questions': questions, 'clusters': clusters,
-                              })
+#             return render(request, "result.html", 
+#                           context={
+#                               "session": request.session.get("user"),
+#                               "pretty": json.dumps(request.session.get("user"), indent=4),
+#                               'questions': questions, 'clusters': clusters,
+#                               })
