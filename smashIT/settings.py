@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-57jli0q*63+_&m8)1_*8z%(-d56=jk$i7%ye7(o&b$d3&r35l&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app','now.sh','127.0.0.1','localhost']
+ALLOWED_HOSTS = ['.vercel.app']
 
 
 # Application definition
@@ -52,21 +52,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'smashIT.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 WSGI_APPLICATION = 'smashIT.wsgi.application'
 
@@ -74,15 +59,15 @@ WSGI_APPLICATION = 'smashIT.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'NAME': 'django.db.backends.postgresql',
-#         'USER': 'postgres',
-#         'PASSWORD': '65fage+++A5a-+g*5deeA65+G+DF2BGc',
-#         'HOST': 'monorail.proxy.rlwy.net',
-#         'PORT': '50571',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'NAME': 'django.db.backends.postgresql',
+        'USER': 'postgres',
+        'PASSWORD': '65fage+++A5a-+g*5deeA65+G+DF2BGc',
+        'HOST': 'monorail.proxy.rlwy.net',
+        'PORT': '50571',
+    }
+}
 
 TEMPLATES = [
     {

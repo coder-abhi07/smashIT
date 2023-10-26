@@ -153,5 +153,5 @@ def result11(request):
                           context={
                               "session": request.session.get("user"),
                               "pretty": json.dumps(request.session.get("user"), indent=4),
-                              'questions': questions, 'clusters': clusters
+                              'questions': questions, 'clusters': clusters,
                               })
