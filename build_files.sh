@@ -1,8 +1,5 @@
-cd my_venv
-cd Scripts
-activate
-cd ..
-cd ..
+source my_venv/Scripts/activate
+
 pip install -r requirements.txt 
 python manage.py collectstatic
 
