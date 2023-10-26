@@ -61,7 +61,8 @@ WSGI_APPLICATION = 'smashIT.wsgi.application'
 
 DATABASES = {
     'default': {
-        'NAME': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'railway',
         'USER': 'postgres',
         'PASSWORD': '65fage+++A5a-+g*5deeA65+G+DF2BGc',
         'HOST': 'monorail.proxy.rlwy.net',

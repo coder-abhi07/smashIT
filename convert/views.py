@@ -13,7 +13,7 @@ from django.urls import reverse
 from urllib.parse import quote_plus, urlencode
 
 
-import hdbscan
+#import hdbscan
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords
 import nltk
