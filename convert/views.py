@@ -19,7 +19,7 @@ from nltk.corpus import stopwords
 import nltk
 
 # Download NLTK stopwords data
-nltk.download('stopwords')
+# nltk.download('stopwords')
 
 
 stemmer = PorterStemmer()
