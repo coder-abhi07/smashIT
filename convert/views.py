@@ -149,4 +149,9 @@ def result11(request):
                 else:
                     clusters[label] = [question]
 
-            return render(request, "result.html", {'questions': questions, 'clusters': clusters})
+            return render(request, "result.html", 
+                          context={
+                              "session": request.session.get("user"),
+                              "pretty": json.dumps(request.session.get("user"), indent=4),
+                              'questions': questions, 'clusters': clusters
+                              })
