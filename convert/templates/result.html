@@ -93,7 +93,14 @@
 
         <p> {{questions|linebreaks}}</p>
         <h1>clusters</h1>
-        <p>{{clusters|linebreaks}}</p>
+            {% for cluster_label, cluster_questions in clusters.items %}
+            <h2>Cluster {{ cluster_label }}</h2>
+            <ul>
+                {% for question in cluster_questions %}
+                <li>{{ question }}</li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
         </div>
         {% endif %}
 
