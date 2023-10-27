@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-57jli0q*63+_&m8)1_*8z%(-d56=jk$i7%ye7(o&b$d3&r35l&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','.vercel.app', 'smashit.tech', 'www.smashit.tech', 'smash-it-git-main-coder-abhi07s-projects.vercel.app', 'smash-3rvblva8a-coder-abhi07s-projects.vercel.app']
+ALLOWED_HOSTS = ['.onrender.com', 'smashit.tech', 'www.smashit.tech', 'smashit.onrender.com']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic',
     'convert.apps.ConvertConfig',
 ]
 
@@ -44,6 +45,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -128,8 +130,8 @@ STATICFILES_DIRS=[
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
-
+STATIC_ROOT = BASE_DIR / 'static'  
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
