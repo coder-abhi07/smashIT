@@ -1,3 +1,11 @@
+import pandas as pd
+import numpy as np
+
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.corpus import stopwords
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn import cluster
 from .models import MyForm
 from django.conf import settings
 import requests
@@ -54,7 +62,7 @@ def index(request):
     if request.method == 'POST' and request.FILES.getlist('myfile'):
         
         parsed_text = ""
-        api_key = "K86627853288957" 
+        api_key = settings.OCR_API_KEY
         payload = {
         'apikey': api_key,
         'OCREngine': 3,
@@ -123,38 +131,50 @@ def finalResult(request):
             # Tokenize the input questions
             questions = questions_text.split("\n")  # Assuming questions are separated by newlines
 
-            # Perform stemming and lemmatization on the words
-            stemmer = PorterStemmer()
-            sw = stopwords.words('english')
+            tfidf = TfidfVectorizer(tokenizer=tokenizer, stop_words=sw)
+            X = pd.DataFrame(tfidf.fit_transform(questions).toarray(),
+                 index=questions, columns=tfidf.get_feature_names_out())
+            c = cluster.AffinityPropagation()
+            pred = c.fit_predict(X)
 
-            def preprocess_question(question):
-                words = [stemmer.stem(word) for word in question.split() if word not in sw]
-                return " ".join(words)
-
-            processed_questions = [preprocess_question(question) for question in questions]
-
-            # Vectorize the processed questions (using CountVectorizer)
-            vectorizer = CountVectorizer()
-            X = vectorizer.fit_transform(processed_questions)
-            X = X.toarray()
-
-            # Apply K-Means clustering on processed questions
-            num_clusters = 3  # You can adjust the number of clusters as needed
-            kmeans = KMeans(n_clusters=num_clusters, random_state=0)
-            labels = kmeans.fit_predict(X)
-
-            # Create a list to store cluster assignments
-            clusters = labels.tolist()
-
-            # Convert processed questions to a string
-            processed_questions_text = "\n".join(processed_questions)
+            c.fit_predict(X)
+            X['pred'] = c.fit_predict(X)
            # Original unprocessed questions
+            df = pd.DataFrame(X['pred'])
 
+            
+            X['pred'] = c.fit_predict(X)
+
+            predicted_clusters = X['pred'].tolist()
+            # Create a mapping between cluster labels and the original strings
+            cluster_mapping = {}
+
+            for cluster_label, original_string in zip(predicted_clusters, questions):
+                if cluster_label not in cluster_mapping:
+                    cluster_mapping[cluster_label] = [original_string]
+                else:
+                    cluster_mapping[cluster_label].append(original_string)
+
+            finalResultString =  ""
+            # Print the original strings for each cluster
+            for cluster_label, original_strings in cluster_mapping.items():
+                
+                for string in original_strings:
+                    finalResultString += string
+                finalResultString += '\n'
+
+        
             finalForm = MyForm()
-            finalForm.fields['my_textarea'].initial = processed_questions_text  # Display the original questions
+            finalForm.fields['my_textarea'].initial = finalResultString
+            
 
             return render(request, "result.html", 
                           context={"session": request.session.get("user"),
                                    "pretty": json.dumps(request.session.get("user"), indent=4),
                                    "finalForm": finalForm,
                                })
+
+
+
+
+

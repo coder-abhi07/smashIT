@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-57jli0q*63+_&m8)1_*8z%(-d56=jk$i7%ye7(o&b$d3&r35l&'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', "False").lower() == "True"
 
-ALLOWED_HOSTS = ["*",'.onrender.com', 'smashit.tech', 'www.smashit.tech', 'smashit.onrender.com']
+ALLOWED_HOSTS = ['.onrender.com', 'smashit.tech', 'www.smashit.tech', 'smashit.onrender.com']
 
 
 # Application definition
@@ -63,12 +63,12 @@ WSGI_APPLICATION = 'smashIT.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': '65fage+++A5a-+g*5deeA65+G+DF2BGc',
-        'HOST': 'monorail.proxy.rlwy.net',
-        'PORT': '50571',
+        'ENGINE': os.environ.get("ENGINE"),
+        'NAME': os.environ.get("NAME"),
+        'USER': os.environ.get("USER"),
+        'PASSWORD': os.environ.get("PASSWORD"),
+        'HOST': os.environ.get("HOST"),
+        'PORT': os.environ.get("PORT"),
     }
 }
 
@@ -136,7 +136,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-OCR_API_KEY = "K86627853288957"
-AUTH0_CLIENT_ID="uMJtoIgRSdgz9aTt6ig49dLi8pRc6RWg"
-AUTH0_CLIENT_SECRET="EXLOhK2AEhqnADV5oQUfTYzQg9TWosCSU336f3vr5KEgpXetI56CG-5g2nRU5kms"
-AUTH0_DOMAIN="smash-it.us.auth0.com"
+OCR_API_KEY =  os.environ.get("OCR_API_KEY")
+AUTH0_CLIENT_ID= os.environ.get("AUTH0_CLIENT_ID")
+AUTH0_CLIENT_SECRET= os.environ.get("AUTH0_CLIENT_SECRET")
+AUTH0_DOMAIN= os.environ.get("AUTH0_DOMAIN")
+
