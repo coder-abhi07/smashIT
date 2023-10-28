@@ -7,7 +7,7 @@
   box-sizing:border-box;
   text-decoration: none;
   list-style: none;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", sans-serif, Arial,Helvetica,sans-serif;
 }
 
 html {
@@ -17,6 +17,8 @@ html {
 
 body {
   overflow-x: hidden;
+  /* background: #ACBCFF; */
+  
  }
 
 .waviy {
@@ -36,7 +38,7 @@ body {
 
   0%,
   80% {
-    transform: rotateY(360deg)
+    trans: rotateY(360deg)
   }
 }
 /* Firefox */
@@ -263,13 +265,32 @@ Responsive Codes
 }
 
 .box{
-  margin: 100px 0;
+  margin-top: 40px;
+  margin-bottom: 80px;
   max-width: 100%;
   background : white;
   padding: 15px;
   width : 100%;
   border-radius : 5px;
   }
+
+.input-bx form button {
+  margin-top: 6px;
+  color: #ffffff;
+  background:  #00A9FF;
+  font-size: 14px;
+  border: 1px solid #12525f;
+  padding: 5px 5px;
+  border-radius: 10px;
+  
+}
+
+.input-bx form button:hover{
+  cursor: pointer;
+  background-color: #0d87d8;
+  transition: 0.5s ;
+  box-shadow: #110e0e;
+}
 
 .upload-area-title{
   text-align: center;
@@ -280,7 +301,7 @@ Responsive Codes
 
 .uploadlabel{
   width : 100%;
-  /* min-height : 100px; */
+  min-height : 250px;
   background : #18a7ff0d;
   display : flex;
   flex-direction : column;
@@ -299,7 +320,7 @@ Responsive Codes
   font-size: 20px;
   color : #18a7ff;
   font-weight: 800;
-  font-family: cursive;
+  
 }
 
 .uploaded{
@@ -362,12 +383,7 @@ border-radius: 50%;
 }
 
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
+
 
 
 
@@ -518,6 +534,7 @@ article {
  background-color: #C2D9FF;
 }
 .articles-top h1{
+  margin-bottom: 40px;
   font-size: 40px;
   font-weight: 600;
   line-height: 60px;
@@ -536,7 +553,6 @@ article a::after {
 /* basic article elements styling */
 article h2 {
   margin: 0 0 18px 0;
-  font-family: "Bebas Neue", cursive;
   font-size: 1.9rem;
   letter-spacing: 0.06em;
   color: var(--title-color);
@@ -690,9 +706,72 @@ Generic layout (demo looks)
 }
 /*  */
 
-.container {
 
-  /* background-color: black; */
+/*  */
+.custom-shape-divider-top-1698415788 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1698415788 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 114px;
+}
+
+.custom-shape-divider-top-1698415788 .shape-fill {
+  fill: #C2D9FF;
+}
+
+/** For mobile devices **/
+@media (max-width: 767px) {
+  .custom-shape-divider-top-1698415788 svg {
+    width: calc(100% + 1.3px);
+    height: 99px;
+  }
+}
+/*  */
+
+.custom-shape-divider-bottom-1698417153 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-bottom-1698417153 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 114px;
+}
+
+.custom-shape-divider-bottom-1698417153 .shape-fill {
+  fill: black;
+}
+
+/** For mobile devices **/
+@media (max-width: 767px) {
+  .custom-shape-divider-bottom-1698417153 svg {
+    width: calc(100% + 1.3px);
+    height: 184px;
+  }
+}
+
+
+/*  */
+
+.super-container{
+  background-color: #ACBCFF;
+}
+.container {
   width: 1200px !important;
   padding: 0 !important;
   margin: 0;
@@ -728,11 +807,13 @@ Generic layout (demo looks)
 .container-title {
   text-align: center;
   padding: 0 !important;
-  margin-bottom: 40px;
   font-size: 40px;
   color: black;
   font-weight: 600;
   line-height: 60px;
+  position: relative;
+  top: 137px;
+  margin-bottom: 150px;
 }
 
 .card {
@@ -816,8 +897,12 @@ Generic layout (demo looks)
 
 
 
+/*  */
 
-
+.custom-shape-divider-bottom-1698462715 .shape-fill {
+  fill: #ACBCFF;
+}
+/*  */
 
 
 
@@ -888,18 +973,28 @@ Generic layout (demo looks)
 }
 
 form h1{
+  margin-bottom: 38px;
+  position: relative;
+  top: 30px;
   text-align: center;
-  padding: 0 !important;
-  margin-bottom: 20px;
   font-size: 40px;
   color: black;
   font-weight: 600;
   line-height: 60px;
+  
 }
 form ul {
   margin: 0 10px;
 }
 
+/*  */
+.custom-shape-divider-bottom-1698491614 .shape-fill {
+  fill: #8E8FFA;
+}
+/*  */
+.instructions-container{
+  background-color: #8E8FFA;
+}
 .instructions {
   font-weight: 600;
   line-height: 32px;
@@ -908,55 +1003,86 @@ form ul {
   margin: 0 10px;
   color: #D0D4CA;
 }
+.form-container form {
+  background:#61677A;
+}
 
-form .my_textarea{
+textarea{
+  border: 1px solid rgba(255, 255, 255, .25);
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
+  
+  backdrop-filter: blur(15px);
   display: flex;
   flex-direction: column;
-  
-  margin: auto;
-  width: 99%;
+  padding: 10px;
+  margin: 0 10px;
+  width: 98%;
   min-height: 100%;
   resize: vertical;
   overflow-y: auto;
   box-sizing: border-box;
-  background-color: #fff;
+  
   font-size: 1.9rem;
+  height: 700px;
 }
-
+textarea::-webkit-scrollbar-thumb {
+  height: 50%;
+  /* Adjust this value to set the desired height */
+  /* Color of the scrollbar thumb */
+}
+/*  */
+.custom-shape-divider-bottom-1698493972 .shape-fill {
+  fill: #61677A;
+}
+/*  */
 .btn {
   display: flex;
   flex-direction: column;
   margin: auto;
-  background: #3498db;
-  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
-  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
-  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
-  background-image: -o-linear-gradient(top, #3498db, #2980b9);
-  background-image: linear-gradient(to bottom, #3498db, #2980b9);
-  -webkit-border-radius: 28;
-  -moz-border-radius: 28;
+  background: grey;
   border-radius: 28px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 21px;
-  padding: 10px 20px 10px 20px;
+  
+  font-size: 18px;
+  padding: 8px 18px 8px 18px;
   text-decoration: none;
 }
 
 .btn:hover {
-  background: #3cb0fd;
-  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  background: #C8C6C6;
+}
+
+.finalResult{
+  background: #61677A;
+
+}
+/*  */
+.custom-shape-divider-bottom-1698508361 .shape-fill {
+  fill: #61677A;
+}
+/*  */
+
+#copyButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
   text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px;
+  border-radius: 30px;
+  cursor: pointer;
 }
 
 .finalResult-heading{
+  position: relative;
+  top: 50px;
+  margin-bottom: 80px;
   text-align: center;
   padding: 0 !important;
-  margin-bottom: 40px;
   font-size: 40px;
   color: black;
   font-weight: 600;

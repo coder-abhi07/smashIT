@@ -1,5 +1,4 @@
 
-
 window.addEventListener("load", ()=>{
   const input = document.getElementById("upload");
   const filewrapper = document.getElementById("filewrapper");

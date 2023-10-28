@@ -1,24 +1,25 @@
-from django.shortcuts import render
 from .models import MyForm
 from django.conf import settings
 import requests
 from nltk.stem import PorterStemmer
-from nltk.corpus import stopwords
 
-import json
+
 from authlib.integrations.django_client import OAuth
-from django.conf import settings
-from django.shortcuts import redirect, render, redirect
+
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from urllib.parse import quote_plus, urlencode
 
 
-import hdbscan
-from sklearn.feature_extraction.text import CountVectorizer
-from nltk.corpus import stopwords
+# import hdbscan
 import nltk
 
-# Download NLTK stopwords data
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.cluster import KMeans
+from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
+import json
+
 nltk.download('stopwords')
 
 
@@ -42,12 +43,13 @@ oauth.register(
 
 
 def index(request):
+    
 
-    if request.method == 'POST':
-        form = MyForm(request.POST, request.FILES)
-        if form.is_valid():
-            text = form.cleaned_data['my_textarea']
-            return render(request, "result.html", {'questions': text})
+    # if request.method == 'POST':
+    #     form = MyForm(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         text = form.cleaned_data['my_textarea']
+    #         return render(request, "result.html", {'questions': text})
         
     if request.method == 'POST' and request.FILES.getlist('myfile'):
         
@@ -111,36 +113,48 @@ def logout(request):
         ),
     )
 
-def result11(request):
+def finalResult(request):
     if request.method == 'POST':
         form = MyForm(request.POST, request.FILES)
         if form.is_valid():
             # Get the text from the form (file or textarea)
             questions_text = form.cleaned_data['my_textarea']
+
             # Tokenize the input questions
             questions = questions_text.split("\n")  # Assuming questions are separated by newlines
-            
-            # Vectorize the questions (you may use more advanced techniques here)
-            # For this example, we're using simple Bag of Words (BoW) vectorization.
+
+            # Perform stemming and lemmatization on the words
+            stemmer = PorterStemmer()
+            sw = stopwords.words('english')
+
+            def preprocess_question(question):
+                words = [stemmer.stem(word) for word in question.split() if word not in sw]
+                return " ".join(words)
+
+            processed_questions = [preprocess_question(question) for question in questions]
+
+            # Vectorize the processed questions (using CountVectorizer)
             vectorizer = CountVectorizer()
-            X = vectorizer.fit_transform(questions)
+            X = vectorizer.fit_transform(processed_questions)
             X = X.toarray()
 
-            # Apply HDBSCAN clustering
-            clusterer = hdbscan.HDBSCAN(min_cluster_size=3)
-            labels = clusterer.fit_predict(X)
+            # Apply K-Means clustering on processed questions
+            num_clusters = 3  # You can adjust the number of clusters as needed
+            kmeans = KMeans(n_clusters=num_clusters, random_state=0)
+            labels = kmeans.fit_predict(X)
 
-            # Organize questions into clusters
-            clusters = {}
-            for label, question in zip(labels, questions):
-                if label in clusters:
-                    clusters[label].append(question)
-                else:
-                    clusters[label] = [question]
+            # Create a list to store cluster assignments
+            clusters = labels.tolist()
+
+            # Convert processed questions to a string
+            processed_questions_text = "\n".join(processed_questions)
+           # Original unprocessed questions
+
+            finalForm = MyForm()
+            finalForm.fields['my_textarea'].initial = processed_questions_text  # Display the original questions
 
             return render(request, "result.html", 
-                          context={
-                              "session": request.session.get("user"),
-                              "pretty": json.dumps(request.session.get("user"), indent=4),
-                              'questions': questions, 'clusters': clusters,
-                              })
+                          context={"session": request.session.get("user"),
+                                   "pretty": json.dumps(request.session.get("user"), indent=4),
+                                   "finalForm": finalForm,
+                               })

@@ -65,43 +65,75 @@
         </div>
 
     </header>
+    <div class="wave-svg-design">
+        <div class="custom-shape-divider-top-1697723717">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path
+                    d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+                    class="shape-fill"></path>
+            </svg>
+        </div>
+    </div>
 
-        {% if form%}
-        <form method="post">
+        {% if form %}
+        <div class = "form-container">
+        <form method="post" action="{% url 'result' %}">
             {% csrf_token %}
-
-            <h1>Text Response</h1>
+            
+            <div class = "instructions-container">
+            <h1>Instructions</h1>
             <ul> 
                 <li class = "instructions" >Simplify the text by removing extraneous information like marks for each question and non-question content. </li>
                 <li class = "instructions" >Edit any inaccuracies, add or remove questions or data, and eliminate empty spaces.</li>
                 <li class = "instructions" > Also, remove any instructions such as the school name and the requirement to attempt a specific number of questions.</li>
                 <li class = "instructions" > The result should be a clean list of questions without any added question marks.</li>
             </ul>
-            
+        </div>
+               <div class = "wave-svg-design">
+                <div class="custom-shape-divider-bottom-1698491614">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M0,0V6c0,21.6,291,111.46,741,110.26,445.39,3.6,459-88.3,459-110.26V0Z" class="shape-fill"></path>
+                    </svg>
+                </div>
+               </div>
             <br>
+            <h1>Text Response</h1>
             {{ form.my_textarea}}
         
-        
+               
             <br>
             <button class = "btn" type="submit">Submit</button>
         </form>
+        <div class = "wave-svg-design">
+        <div class="custom-shape-divider-bottom-1698493972">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path
+                    d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+                    class="shape-fill"></path>
+            </svg>
+        </div>
+        </div>
+        </div>
         {% endif %}
 
-        {% if questions%}
+        {% if finalForm %}
         <div class = "finalResult"> 
-        <h2 class = "finalResult-heading">Important Questions</h2>
-
-        <p> {{questions|linebreaks}}</p>
-        <h1>clusters</h1>
-            {% for cluster_label, cluster_questions in clusters.items %}
-            <h2>Cluster {{ cluster_label }}</h2>
-            <ul>
-                {% for question in cluster_questions %}
-                <li>{{ question }}</li>
-                {% endfor %}
-            </ul>
-            {% endfor %}
+            <h2 class = "finalResult-heading">Important Questions</h2>
+            
+       
+        {{ finalForm.my_textarea}}
+        <button id = "copyButton"> Copy to Clipboard </button>
         </div>
+        <div class="wave-svg-design">
+            <div class="custom-shape-divider-bottom-1698508361">
+                <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <path
+                        d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+                        class="shape-fill"></path>
+                </svg>
+            </div>
+        </div>
+        
         {% endif %}
 
 <hr class="dotted-line">
@@ -138,6 +170,41 @@
 </footer>
 <script>
 
+    document.getElementById("copyButton").addEventListener("click", function () {
+            // Get the text from the text area
+            var textArea = document.querySelector(".my_textarea");
+            textArea.select();
+            
+            
+            
+            // Deselect the text area
+            document.execCommand("copy");
+
+            textArea.blur();
+
+            // Update the button text
+            this.innerHTML = "Copied!";
+
+            // Reset the button text after a brief delay
+            setTimeout(function () {
+                document.getElementById("copyButton").innerHTML = "Copy to Clipboard";
+            }, 1000);
+        });
+
+
+        function calcHeight(value) {
+            let numberOfLineBreaks = (value.match(/\n/g) || []).length;
+            // min-height + lines x line-height + padding + border
+            let newHeight = 20 + numberOfLineBreaks * 20 + 12 + 2;
+            return newHeight;
+        }
+
+        let textarea = document.querySelector(".my_textarea");
+        textarea.addEventListener("keyup", () => {
+            textarea.style.height = calcHeight(textarea.value) + "px";
+        });
+
+
     document.getElementById("year").innerHTML = new Date().getFullYear();
     const mobile_nav = document.querySelector(".mobile-navbar-btn");
     const nav_header = document.querySelector(".header");
@@ -150,6 +217,7 @@
     mobile_nav.addEventListener("click", () => toggleNavbar());
 
 </script>
+
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
