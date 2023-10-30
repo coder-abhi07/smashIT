@@ -29,8 +29,9 @@ body {
   position: relative;
   display: inline-block;
   font-weight: 500;
-  font-size: 2.2em;
+  font-size: 2.5rem;
   color: black;
+  text-transform: uppercase;
   animation: flip 2s infinite;
   animation-delay: calc(.2s * var(--i))
 }
@@ -38,9 +39,10 @@ body {
 
   0%,
   80% {
-    trans: rotateY(360deg)
+    transform: rotateY(360deg)
   }
 }
+
 /* Firefox */
 * {
   scrollbar-width: thin;

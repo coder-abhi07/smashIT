@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+# from dotenv import load_dotenv, find_dotenv
+# ENV_FILE = find_dotenv()
+# if ENV_FILE:
+#     load_dotenv(ENV_FILE)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -30,6 +35,8 @@ ALLOWED_HOSTS = ['.onrender.com', 'smashit.tech', 'www.smashit.tech', 'smashit.o
 
 
 # Application definition
+SITE_ID = 1
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,9 +44,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
     'convert.apps.ConvertConfig',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [

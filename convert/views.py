@@ -51,40 +51,6 @@ oauth.register(
 
 
 def index(request):
-    
-
-    # if request.method == 'POST':
-    #     form = MyForm(request.POST, request.FILES)
-    #     if form.is_valid():
-    #         text = form.cleaned_data['my_textarea']
-    #         return render(request, "result.html", {'questions': text})
-        
-    if request.method == 'POST' and request.FILES.getlist('myfile'):
-        
-        parsed_text = ""
-        api_key = settings.OCR_API_KEY
-        payload = {
-        'apikey': api_key,
-        'OCREngine': 3,
-        'isTable': True
-        }
-
-        for file in request.FILES.getlist('myfile'):
-            response = requests.post('https://api.ocr.space/parse/image',
-                                     files={file.name: file},
-                                     data=payload)
-            results = response.json()
-            for result in results['ParsedResults']:
-                parsed_text += result['ParsedText']
-
-
-        
-       
-        form = MyForm()
-        form.fields['my_textarea'].initial = parsed_text
-        
-        return render(request, 'result.html', {'form': form})
-    
     return render(
         request,
         "index.html",
@@ -120,6 +86,30 @@ def logout(request):
             quote_via=quote_plus,
         ),
     )
+
+def textResponse(request):
+    if request.method == 'POST' and request.FILES.getlist('myfile'):
+        
+        parsed_text = ""
+        api_key = settings.OCR_API_KEY
+        payload = {
+        'apikey': api_key,
+        'OCREngine': 3,
+        'isTable': True
+        }
+
+        for file in request.FILES.getlist('myfile'):
+            response = requests.post('https://api.ocr.space/parse/image',
+                                     files={file.name: file},
+                                     data=payload)
+            results = response.json()
+            for result in results['ParsedResults']:
+                parsed_text += result['ParsedText']
+       
+        form = MyForm()
+        form.fields['my_textarea'].initial = parsed_text
+        
+        return render(request, 'result.html', {'form': form})
 
 def finalResult(request):
     if request.method == 'POST':
@@ -176,5 +166,25 @@ def finalResult(request):
 
 
 
+#errors
+import logging
+
+# Create a logger with a specific name for your view function
+logger = logging.getLogger('convert.views')
+
+
+def custom_page_not_found_view(request, exception):
+    logger.error('Page Not Found: %s', request.path)
+    error_message = "The page you are looking for does not exist."
+    return render(request, "404.html", {'error_message': error_message}, status=404)
+
+def custom_error_view(request, exception=None):
+    return render(request, "500.html", {})
+
+def custom_permission_denied_view(request, exception=None):
+    return render(request, "403.html", {})
+
+def custom_bad_request_view(request, exception=None):
+    return render(request, "400.html", {})
 
 
