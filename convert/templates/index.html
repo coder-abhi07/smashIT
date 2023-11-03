@@ -1,7 +1,7 @@
 {% load static %}
 
   {% if session %}
-  <h1>Welcome {{session.userinfo.name}}!</h1>
+ 
   <div>
     <pre>{{pretty}}</pre>
   </div>
@@ -50,8 +50,11 @@
     <nav class="navbar">
       <ul class="navbar-list">
         {% if session %}
+        <li><h1>Welcome {{session.userinfo.name}} !</h1></li>
+        <li><img src="{{session.userinfo.picture}}" alt="user profile"></li>
         <li> <a class = "navbar-link" href="{% url 'logout' %}" id="qsLogoutBtn">Logout</a></li>
         {% else %}
+        <li><h1>Welcome Guest !</h1></li>
         <li> <a class = "navbar-link" href="{% url 'login' %}" id="qsLoginBtn"><ion-icon name="person-sharp"></ion-icon>Login</a></li>
         {% endif %}
         <li><a class="navbar-link" href="https://www.smashit.tech/">Home</a></li>
