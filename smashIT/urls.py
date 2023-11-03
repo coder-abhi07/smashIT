@@ -24,6 +24,9 @@ from convert.sitemap import CustomSitemap
 
 from django.views.generic.base import TemplateView
 
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.generic.base import RedirectView
+
 
 sitemaps = {
     'custom': CustomSitemap,
@@ -40,10 +43,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('convert.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    path(
-        "robots.txt",
-        TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
-    ),
+    path("robots.txt",TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
+     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('icon/favicon.ico')))
 ]
 
 
