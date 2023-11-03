@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-
+import logging
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 from nltk.corpus import stopwords
 
@@ -109,8 +109,7 @@ def textResponse(request):
         form = MyForm()
         form.fields['my_textarea'].initial = parsed_text
         
-        return render(request, 'result.html', context={"session": request.session.get("user"),
-                                   "pretty": json.dumps(request.session.get("user"), indent=4), 'form': form})
+        return render(request, 'result.html', {'form': form})
 
 def finalResult(request):
     if request.method == 'POST':
@@ -159,16 +158,7 @@ def finalResult(request):
             finalForm.fields['my_textarea'].initial = finalResultString
             
 
-            return render(request, "result.html", 
-                          context={"session": request.session.get("user"),
-                                   "pretty": json.dumps(request.session.get("user"), indent=4),
-                                   "finalForm": finalForm,
-                               })
-
-
-
-#errors
-import logging
+            return render(request, "result.html", {"finalForm": finalForm})
 
 # Create a logger with a specific name for your view function
 logger = logging.getLogger('convert.views')
@@ -191,6 +181,5 @@ def custom_bad_request_view(request, exception=None):
 
 
 def about(request):
-    return render(request, "about.html",  context={"session": request.session.get("user"),
-                                   "pretty": json.dumps(request.session.get("user"), indent=4),
-                               })
+    return render(request, "about.html")
+
