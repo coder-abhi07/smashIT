@@ -109,7 +109,8 @@ def textResponse(request):
         form = MyForm()
         form.fields['my_textarea'].initial = parsed_text
         
-        return render(request, 'result.html', {'form': form})
+        return render(request, 'result.html', context={"session": request.session.get("user"),
+                                   "pretty": json.dumps(request.session.get("user"), indent=4), 'form': form})
 
 def finalResult(request):
     if request.method == 'POST':
@@ -188,3 +189,8 @@ def custom_bad_request_view(request, exception=None):
     return render(request, "400.html", {})
 
 
+
+def about(request):
+    return render(request, "about.html",  context={"session": request.session.get("user"),
+                                   "pretty": json.dumps(request.session.get("user"), indent=4),
+                               })
