@@ -403,6 +403,7 @@ border-radius: 50%;
 
 
 .footer {
+  bottom: 0;
   position: relative;
   width: 100%;
   background: #3586ff;
