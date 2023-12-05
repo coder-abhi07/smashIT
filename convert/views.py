@@ -90,7 +90,7 @@ def logout(request):
 def textResponse(request):
     if request.method == 'POST' and request.FILES.getlist('myfile'):
         
-        parsed_text = ""
+        parsed_text = []
         api_key = settings.OCR_API_KEY
         payload = {
         'apikey': api_key,
@@ -104,10 +104,10 @@ def textResponse(request):
                                      data=payload)
             results = response.json()
             for result in results['ParsedResults']:
-                parsed_text += result['ParsedText']
+                parsed_text.append(result['ParsedText'])
        
         form = MyForm()
-        form.fields['my_textarea'].initial = parsed_text
+        form.fields['my_textarea'].initial = '/n'.join(parsed_text)
         
         return render(request, 'result.html', {'form': form})
 
