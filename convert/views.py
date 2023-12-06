@@ -28,7 +28,7 @@ from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 import json
 
-#nltk.download('stopwords')
+nltk.download('stopwords')
 
 
 stemmer = PorterStemmer()
