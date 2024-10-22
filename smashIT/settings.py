@@ -35,7 +35,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get('DEBUG') == 'True'
 
 
-ALLOWED_HOSTS = ['.onrender.com', 'smashit.tech', 'www.smashit.tech', 'smashit.onrender.com']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
