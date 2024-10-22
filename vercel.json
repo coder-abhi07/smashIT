@@ -2,9 +2,9 @@
     "version": 2,
     "builds": [
       {
-        "src": "product_rating/wsgi.py",
+        "src": "smashIT/wsgi.py",
         "use": "@vercel/python",
-        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
       },
       {
         "src": "build_files.sh",
@@ -17,7 +17,7 @@
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "product_rating/wsgi.py"
+        "dest": "smashIT/wsgi.py"
       }
     ]
   }
