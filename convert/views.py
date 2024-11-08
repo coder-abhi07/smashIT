@@ -36,7 +36,7 @@ sw = stopwords.words('english')
 
 def tokenizer(keyword):
     return [stemmer.stem(w) for w in keyword.split()]
-
+"""
 oauth = OAuth()
 
 oauth.register(
@@ -49,18 +49,18 @@ oauth.register(
     server_metadata_url=f"https://{settings.AUTH0_DOMAIN}/.well-known/openid-configuration",
 )
 
-
+"""
 def index(request):
     return render(
         request,
         "index.html",
-        context={
+        """context={
             "session": request.session.get("user"),
             "pretty": json.dumps(request.session.get("user"), indent=4),
-        },
+        },"""
     )
 
-
+"""
 def callback(request):
     token = oauth.auth0.authorize_access_token(request)
     request.session["user"] = token
@@ -86,7 +86,7 @@ def logout(request):
             quote_via=quote_plus,
         ),
     )
-
+"""
 def textResponse(request):
     if request.method == 'POST' and request.FILES.getlist('myfile'):
         
