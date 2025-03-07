@@ -1,0 +1,150 @@
+import requests
+from django.conf import settings
+from django.shortcuts import redirect, render
+from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm, UserCreationForm
+from django.contrib import messages
+from .models import MyForm
+from .forms import UserUpdateForm
+
+
+def textResponse(request):
+    if request.method == 'POST' and request.FILES.getlist('myfile'):
+        parsed_text = []
+        api_key = settings.OCR_API_KEY
+        payload = {"apikey": api_key, "OCREngine": 2, "isTable": True}
+
+        for file in request.FILES.getlist('myfile'):
+            response = requests.post("https://api.ocr.space/parse/image", files={file.name: file}, data=payload)
+            results = response.json()
+            for result in results.get("ParsedResults", []):
+                parsed_text.append(result.get("ParsedText", ""))
+
+        form = MyForm(initial={'my_textarea': '\n'.join(parsed_text)})
+        return render(request, "result.html", {"form": form})
+
+
+def finalResult(request):
+    if request.method == 'POST':
+        form = MyForm(request.POST, request.FILES)
+        if form.is_valid():
+            finalForm = MyForm(initial={'my_textarea': "final_result"})
+            return render(request, "result.html", {"finalForm": finalForm})
+
+
+def custom_page_not_found_view(request, exception):
+    return render(request, "404.html", {"error_message": "The page you are looking for does not exist."}, status=404)
+
+
+def custom_error_view(request, exception=None):
+    return render(request, "500.html")
+
+
+def custom_permission_denied_view(request, exception=None):
+    return render(request, "403.html")
+
+
+def custom_bad_request_view(request, exception=None):
+    return render(request, "400.html")
+
+
+def about(request):
+    return render(request, "about.html")
+
+
+def index(request):
+    return render(request, "index.html")
+
+
+@login_required
+def change_password(request):
+    if request.user.has_usable_password():
+        if request.method == 'POST':
+            form = PasswordChangeForm(request.user, request.POST)
+            if form.is_valid():
+                user = form.save()
+                update_session_auth_hash(request, user)  # Keeps the user logged in
+                messages.success(request, 'Your password has been successfully updated!')
+                return redirect('user_profile')
+            else:
+                messages.error(request, 'Please correct the error below.')
+        else:
+            form = PasswordChangeForm(request.user)
+
+        return render(request, 'change_password.html', {'form': form})
+
+    return redirect('set_password')
+
+
+@login_required
+def set_password(request):
+    if not request.user.has_usable_password():
+        if request.method == 'POST':
+            form = SetPasswordForm(request.user, request.POST)
+            if form.is_valid():
+                user = form.save()
+                update_session_auth_hash(request, user)  # Keeps the user logged in
+                messages.success(request, 'Your password has been successfully set!')
+                return redirect('user_profile')
+            else:
+                messages.error(request, 'Please correct the error below.')
+        else:
+            form = SetPasswordForm(request.user)
+
+        return render(request, 'set_password.html', {'form': form})
+
+    return redirect('change_password')
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('index')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})
+
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+        else:
+            return render(request, 'login.html', {'error_message': 'Invalid credentials'})
+    return render(request, 'login.html')
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('/')
+
+
+@login_required
+def user_profile(request):
+    user = request.user
+    return render(request, 'profile.html', {'user': user})
+
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated successfully.')
+            return redirect('user_profile')
+    else:
+        form = UserUpdateForm(instance=request.user)
+
+    return render(request, 'update_profile.html', {'form': form})

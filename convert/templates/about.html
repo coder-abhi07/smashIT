@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>About
+    </title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static '/icon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static '/icon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" href="{% static '/icon/favicon.ico'%}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static '/icon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static '/icon/site.webmanifest' %}" />
+
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <img src="{% static 'icon/favicon.ico' %}" alt="logo" />
+            <div class="waviy">
+                <span style="--i:1">S</span>
+                <span style="--i:2">m</span>
+                <span style="--i:3">a</span>
+                <span style="--i:4">s</span>
+                <span style="--i:5">h</span>
+                <span style="--i:6">I</span>
+                <span style="--i:7">T</span>
+                <span style="--i:8">.</span>
+            </div>
+        </div>
+        <nav class="navbar">
+            <ul class="navbar-list">
+                {% if user.is_authenticated %}
+                <li> <a class="navbar-link" href="{% url 'logout' %}" id="qsLogoutBtn">Logout</a></li>
+                {% else %}
+                <li> <a class="navbar-link" href="{% url 'login' %}" id="qsLoginBtn"><ion-icon
+                            name="person-sharp"></ion-icon>Login</a></li>
+                {% endif %}
+                <li><a class="navbar-link" href="{% url 'index' %}">Home</a></li>
+                <li><a class="navbar-link" href="{% url 'about' %}">About</a></li>
+                <li><a class="navbar-link" href="#contactMe">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="mobile-navbar-btn">
+            <ion-icon name="menu-outline" class="mobile-nav-icon"></ion-icon>
+            <ion-icon name="close-outline" class="mobile-nav-icon"></ion-icon>
+        </div>
+
+    </header>
+
+    <div class="wave-svg-design">
+        <div class="custom-shape-divider-top-1697723717">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                preserveAspectRatio="none">
+                <path
+                    d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+                    class="shape-fill"></path>
+            </svg>
+        </div>
+    </div>
+
+
+    
+<div class="about-section">
+    <div class="inner-container">
+        <h1>About </h1>
+        <p class="text">
+
+            Welcome to Question Paper Analyzer! This is Abhishek kumar, a student at Himachal Pradesh Technical University (HPTU),
+            passionate about technology and coding.
+            <br>
+            This platform is dedicated to simplifying your academic journey. It provides students with curated lists of
+            essential questions, simplifying the process of understanding question paper patterns.
+            <br>
+            Just upload your question paper, and watch the magic unfold. The website automatically organizes and
+            presents vital questions, making exam preparation more efficient.
+            <br>
+            Join our student community, connect with like-minded peers, and empower your education. Let's explore,
+            learn, and excel in technology and coding together.
+            <br>
+        </p>
+
+    </div>
+</div>
+
+
+
+
+    <hr class="dotted-line">
+    
+    <footer class="footer">
+        <div class="waves">
+            <div class="wave" id="wave1"></div>
+            <div class="wave" id="wave2"></div>
+            <div class="wave" id="wave3"></div>
+            <div class="wave" id="wave4"></div>
+        </div>
+        <ul id="contactMe" class="social-icon">
+            <li class="social-icon__item"><a class="social-icon__link" target="_blank"
+                    href="https://www.facebook.com/profile.php?id=100028091352527&sk=grid">
+                    <ion-icon name="logo-facebook"></ion-icon>
+                </a></li>
+            <li class="social-icon__item"><a class="social-icon__link" target="_blank"
+                    href="https://twitter.com/coder_abhi07">
+                    <ion-icon name="logo-twitter"></ion-icon>
+                </a></li>
+            <li class="social-icon__item"><a class="social-icon__link" target="_blank"
+                    href="https://www.linkedin.com/in/abhishek-kumar-573418164/">
+                    <ion-icon name="logo-linkedin"></ion-icon>
+                </a></li>
+            <li class="social-icon__item"><a class="social-icon__link" target="_blank"
+                    href="https://www.instagram.com/this_isabhi07/">
+                    <ion-icon name="logo-instagram"></ion-icon>
+                </a></li>
+        </ul>
+    
+    
+        <p>&copy; <span id="year"></span>
+            SmashIT | All Rights Reserved</p>
+    </footer>
+    <script>
+
+
+
+    document.getElementById("year").innerHTML = new Date().getFullYear();
+    const mobile_nav = document.querySelector(".mobile-navbar-btn");
+    const nav_header = document.querySelector(".header");
+
+    const toggleNavbar = () => {
+
+        nav_header.classList.toggle("active");
+    };
+
+    mobile_nav.addEventListener("click", () => toggleNavbar());
+
+    </script>
+    
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    
+    
+    </body>
+    
+</html>
