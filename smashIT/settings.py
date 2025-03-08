@@ -208,3 +208,22 @@ SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 
 SOCIALACCOUNT_LOGIN_ON_GET=True
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "OAUTH_PKCE_ENABLED": True,  # PKCE improves security
+    }
+}
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://smash-it-peach.vercel.app/", 
+    "https://qpaper.live",  
+    "https://smashit.onrender.com",
+]
