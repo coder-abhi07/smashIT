@@ -231,3 +231,5 @@ CSRF_TRUSTED_ORIGINS = [
     "http://smashit.onrender.com",
     
 ]
+
+SOCIALACCOUNT_ADAPTER = "convert.adapters.CustomSocialAccountAdapter"
