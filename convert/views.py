@@ -9,7 +9,111 @@ from .models import MyForm
 from .forms import UserUpdateForm
 
 
+# def textResponse(request):
+#     if request.method == 'POST' and request.FILES.getlist('myfile'):
+#         parsed_text = []
+#         api_key = settings.OCR_API_KEY
+#         payload = {"apikey": api_key, "OCREngine": 2, "isTable": True}
+
+#         for file in request.FILES.getlist('myfile'):
+#             response = requests.post("https://api.ocr.space/parse/image", files={file.name: file}, data=payload)
+#             results = response.json()
+#             for result in results.get("ParsedResults", []):
+#                 parsed_text.append(result.get("ParsedText", ""))
+
+#         form = MyForm(initial={'my_textarea': '\n'.join(parsed_text)})
+#         return render(request, "result.html", {"form": form})
+
+
+# def finalResult(request):
+#     if request.method == 'POST':
+#         form = MyForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             finalForm = MyForm(initial={'my_textarea': "final_result"})
+#             return render(request, "result.html", {"finalForm": finalForm})
+
+# # ///////////////////// working
+# from django import forms
+# from django.shortcuts import render
+# import requests
+# import numpy as np
+# from django.conf import settings
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# from sklearn.cluster import KMeans
+
+# class MyForm(forms.Form):
+#     my_textarea = forms.CharField(widget=forms.Textarea, required=False)
+
+# def textResponse(request):
+#     """Extract text using OCR.space and display it in a form."""
+#     if request.method == 'POST' and request.FILES.getlist('myfile'):
+#         parsed_text = []
+#         api_key = settings.OCR_API_KEY
+#         payload = {"apikey": api_key, "OCREngine": 2, "isTable": True}
+
+#         for file in request.FILES.getlist('myfile'):
+#             response = requests.post("https://api.ocr.space/parse/image", files={file.name: file}, data=payload)
+#             results = response.json()
+#             for result in results.get("ParsedResults", []):
+#                 parsed_text.append(result.get("ParsedText", ""))
+
+#         ocr_text = "\n".join(parsed_text)  # Combine extracted text
+#         form = MyForm(initial={'my_textarea': ocr_text})  # Set initial text
+
+#         return render(request, "result.html", {"form": form})
+
+# def finalResult(request):
+#     """Take user-reviewed text and apply clustering."""
+#     if request.method == 'POST':
+#         form = MyForm(request.POST)  # Just get the text directly from the form
+#         if form.is_valid():
+#             user_text = form.cleaned_data['my_textarea']  # No extra processing
+#             clustered_text = cluster_text(user_text)  # Apply clustering
+            
+#             finalForm = MyForm(initial={'my_textarea': clustered_text})  # Update form with clusters
+#             return render(request, "result.html", {"finalForm": finalForm})  # Use 'finalform' as expected
+
+# def cluster_text(text):
+#     """Cluster text using KMeans with TF-IDF vectorization."""
+#     sentences = [s.strip() for s in text.split("\n") if s.strip()]  # Split into sentences
+
+#     if len(sentences) < 2:
+#         return "Not enough text to cluster."
+
+#     # Convert text into TF-IDF feature vectors
+#     vectorizer = TfidfVectorizer(stop_words="english")
+#     X = vectorizer.fit_transform(sentences)
+
+#     num_clusters = min(5, len(sentences))  # Limit clusters
+#     kmeans = KMeans(n_clusters=num_clusters, random_state=42, n_init=10)
+#     labels = kmeans.fit_predict(X)
+
+#     clustered_output = ""
+#     for i in range(num_clusters):
+#         clustered_output += f"Cluster {i+1}:\n"
+#         clustered_output += "\n".join([sentences[j] for j in range(len(sentences)) if labels[j] == i])
+#         clustered_output += "\n\n"
+
+#     return clustered_output
+
+
+# ////////////////////////
+from django import forms
+from django.shortcuts import render
+import requests
+import numpy as np
+from django.conf import settings
+from sklearn.cluster import KMeans
+from sentence_transformers import SentenceTransformer
+
+# Load BERT Model
+bert_model = SentenceTransformer("all-MiniLM-L6-v2")  # Small and fast BERT model
+
+class MyForm(forms.Form):
+    my_textarea = forms.CharField(widget=forms.Textarea, required=False)
+
 def textResponse(request):
+    """Extract text using OCR.space and display it in a form."""
     if request.method == 'POST' and request.FILES.getlist('myfile'):
         parsed_text = []
         api_key = settings.OCR_API_KEY
@@ -21,16 +125,47 @@ def textResponse(request):
             for result in results.get("ParsedResults", []):
                 parsed_text.append(result.get("ParsedText", ""))
 
-        form = MyForm(initial={'my_textarea': '\n'.join(parsed_text)})
+        ocr_text = "\n".join(parsed_text)  # Combine extracted text
+        form = MyForm(initial={'my_textarea': ocr_text})  # Set initial text
+
         return render(request, "result.html", {"form": form})
 
-
 def finalResult(request):
+    """Take user-reviewed text and apply BERT-based clustering."""
     if request.method == 'POST':
-        form = MyForm(request.POST, request.FILES)
+        form = MyForm(request.POST)  # Just get the text directly from the form
         if form.is_valid():
-            finalForm = MyForm(initial={'my_textarea': "final_result"})
-            return render(request, "result.html", {"finalForm": finalForm})
+            user_text = form.cleaned_data['my_textarea']  # Get user-reviewed text
+            clustered_text = cluster_text(user_text)  # Apply BERT-based clustering
+            
+            finalForm = MyForm(initial={'my_textarea': clustered_text})  # Update form with clusters
+            return render(request, "result.html", {"finalForm": finalForm})  # Use 'finalform' as expected
+
+def cluster_text(text):
+    """Cluster text using BERT embeddings and KMeans."""
+    sentences = [s.strip() for s in text.split("\n") if s.strip()]  # Split into sentences
+
+    if len(sentences) < 2:
+        return "Not enough text to cluster."
+
+    # Convert text into BERT embeddings
+    embeddings = bert_model.encode(sentences)
+
+    num_clusters = min(5, len(sentences))  # Limit clusters
+    kmeans = KMeans(n_clusters=num_clusters, random_state=42, n_init=10)
+    labels = kmeans.fit_predict(embeddings)
+
+    clustered_output = ""
+    for i in range(num_clusters):
+        clustered_output += f"Cluster {i+1}:\n"
+        clustered_output += "\n".join([sentences[j] for j in range(len(sentences)) if labels[j] == i])
+        clustered_output += "\n\n"
+
+    return clustered_output
+
+# ///////////////////////
+
+
 
 
 def custom_page_not_found_view(request, exception):
