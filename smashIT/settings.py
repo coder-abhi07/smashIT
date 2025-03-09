@@ -22,12 +22,12 @@ load_dotenv()
 # if ENV_FILE:
 #     load_dotenv(ENV_FILE)
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = False
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,7 +47,7 @@ ALLOWED_HOSTS = ["*"]
 
 # Application definition
 SITE_ID = 1
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -224,7 +224,10 @@ SOCIALACCOUNT_PROVIDERS = {
 
 CSRF_TRUSTED_ORIGINS = [
     "https://smash-it-peach.vercel.app/", 
+    "http://smash-it-peach.vercel.app/", 
     "https://qpaper.live",  
+    "http://qpaper.live",  
     "https://smashit.onrender.com",
+    "http://smashit.onrender.com",
     
 ]
