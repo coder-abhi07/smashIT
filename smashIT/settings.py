@@ -229,6 +229,9 @@ CSRF_TRUSTED_ORIGINS = [
     "http://qpaper.live",  
     "https://smashit.onrender.com",
     "http://smashit.onrender.com",
+    "http://www.qpaper.live",
+    "https://www.smashit.onrender.com",
+
     
 ]
 
