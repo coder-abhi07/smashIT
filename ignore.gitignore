@@ -24,3 +24,4 @@ venv/
 
 # Ignore database files  
 db.sqlite3  
+nodeEx.js
