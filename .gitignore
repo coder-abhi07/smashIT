@@ -1,7 +1,27 @@
+# Ignore system-specific directories  
+.DS_Store  
+Thumbs.db  
 
-/smashIT/__pycache__
-/smashIT/__pycache__
-smashIT/__pycache__/__init__.cpython-311.pyc
-/smashIT/__pycache__
-/convert/__pycache__
-/convert/migrations/__pycache__
+# Ignore Python compiled files  
+__pycache__/  
+smashIT/__pycache__/ 
+convert/__pycache__/  
+*.pyc  
+*.pyo  
+
+# Ignore virtual environments  
+venv/  
+.venv/  
+
+# Ignore IDE and editor settings  
+.vscode/  
+.github/  
+
+# Ignore environment variables and logs  
+.env  
+*.env  
+*.log  
+
+# Ignore database files  
+db.sqlite3  
+nodeEx.js
