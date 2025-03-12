@@ -9,5 +9,4 @@ dotenv==0.9.9
 django-allauth==65.4.1
 PyJWT==2.10.1
 cryptography==44.0.1
-sentence-transformers==3.4.1
 scikit-learn==1.6.1
