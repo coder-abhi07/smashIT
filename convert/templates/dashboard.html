@@ -1,0 +1,243 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Question Paper Analyzer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static/font/Lucide.css">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  
+
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="logo">
+        <a href="#">
+          <img src="{% static '/logo.png' %}" alt="Logo" class="logo-img">
+          <span >Question Paper Analyzer</span>
+        </a>
+      </div>
+
+      
+      
+      <nav class="desktop-nav">
+        <ul>
+          <li><a href="{% url 'index' %}" >Home</a></li>
+          <li><a href="{% url 'dashboard' %}" class = "active">Dashboard</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+        </ul>
+        
+        
+        <div class="theme-toggle">
+          <button id="themeToggle" aria-label="Toggle theme">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+          </button>
+        </div>
+        
+      {% if user.is_authenticated %}
+      <div class="user-menu">
+        <button class="user-button" id="userMenuButton">
+          {% if user.avatar_url%}
+            <span class="user-avatar"><img src="{{user.avatar_url}} "  alt="avatar"></span>
+            {% else %}
+            <span class="user-avatar">{{ user.username|first|upper }}</span>
+            {% endif %}
+          <span class="user-name">{{ user.first_name}}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="user-dropdown" id="userDropdown">
+          <ul>
+            <li>
+              <a href="{% url 'user_profile' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Profile
+              </a>
+            </li>
+            <li>
+              
+              <a id="logoutButton" href="{% url 'logout'%}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Logout
+              </a>
+            </li>
+        
+          </ul>
+        </div>
+      </div>
+        {% else %}
+        <div class="auth-buttons">
+          <a href="{% url 'login' %}" class="login-button">Login</a>
+          <a href="{% url 'signup' %}" class="register-button">Register</a>
+        </div>
+        {% endif %}
+      </nav>
+      
+      <button class="mobile-menu-button" aria-label="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+      </button>
+    </div>
+    
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-menu">
+      <nav>
+        <ul>
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li><a href="#" class = "active">Dashboard</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+        </ul>
+        
+       
+          
+      {% if user.is_authenticated %}
+      <div class="user-menu">
+        <button class="user-button" id="userMenuButton2">
+          {% if user.avatar_url%}
+            <span class="user-avatar"><img src="{{user.avatar_url}} "  alt="avatar"></span>
+            {% else %}
+            <span class="user-avatar">{{ user.username|first|upper }}</span>
+            {% endif %}
+          
+          <span class="user-name">{{ user.first_name}}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="user-dropdown" id="userDropdown2">
+          <ul>
+            <li>
+              <a href="{% url 'user_profile' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Profile
+              </a>
+            </li>
+            <li>
+              
+              <a id="logoutButton" href="{% url 'logout'%}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Logout
+              </a>
+            </li>
+        
+          </ul>
+        </div>
+      </div>
+      {% else %}
+        <div class="mobile-auth-buttons">
+          <a href="{% url 'login' %}" class="login-button">Login</a>
+          <a href="{% url 'signup' %}" class="register-button">Register</a>
+        </div>
+        {% endif %}
+
+        <div class="theme-toggle">
+          <button id="themeToggle2" aria-label="Toggle theme">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+          </button>
+        </div>
+
+      </nav>
+    </div>
+
+    
+  </header>
+
+  <main class="main">
+    
+    <div class="container">
+      <div class="heading">
+        <h1>You Smash IT you Nail IT</h1>
+        <p>Upload question papers to extract and analyze questions.</p>
+      </div>
+      <form method="POST" enctype="multipart/form-data" action="{% url 'textResponse' %}">
+        {% csrf_token %}
+      <div class="upload-area" id="upload-area">
+        <input type="file"  name="myfile" id="file-input" multiple accept=".png,.jpg,.jpeg,.pdf" hidden>
+        <div class="upload-icon">
+          <i data-lucide="upload" size="32"></i>
+        </div>
+        <div class="upload-text">
+          <h3 id="upload-heading">Upload question papers</h3>
+          <p>Drag and drop files, or click to browse</p>
+          <p class="formats">Supported formats: PNG, JPEG, JPG, PDF</p>
+        </div>
+        <div  class = "btn btn-outline btn-lg" id="browse-btn">
+          <i data-lucide="file-text" size="16"></i>
+          Browse files
+        </div>
+      </div>
+
+      <div class="progress-container" id="progress-container" style="display: none;">
+        <div class="progress-header">
+          <span>Uploading files...</span>
+          <span id="progress-percentage">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-value" id="progress-value" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div id="files-container" style="display: none;">
+        <div class="files-header">
+          <h2>Uploaded Files (<span id="file-count">0</span>)</h2>
+          <div class="files-actions">
+            <button type = "button" class = "btn btn-sm btn-default" id="clear-btn">
+              <i data-lucide="trash-2" size="16"></i>
+              Clear All
+            </button>
+            
+            <button type="submit" class = "btn btn-sm btn-primary">  <i data-lucide="scan-search" size="16"></i>Analyze</button>
+          </form>
+          
+          </div>
+        </div>
+      
+
+        <div class="files-list" id="files-list">
+          <!-- Files will be added here -->
+        </div>
+      </div>
+    </div>
+  
+  </main>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-text">
+          <h3>Question Paper Analyzer</h3>
+          <p>Smash-IT: Simplifying your academic journey with AI-powered question paper analysis.</p>
+        </div>
+        <div class="social-links">
+          <a href="https://www.facebook.com/profile.php?id=100028091352527&sk=grid" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+            <i  data-lucide="facebook"></i>
+          </a>
+          <a href="https://twitter.com/coder_abhi07" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Twitter">
+            <i  data-lucide="twitter"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/abhishek-kumar-573418164/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
+            <i  data-lucide="linkedin"></i>
+          </a>
+          <a href="https://www.instagram.com/this_isabhi07/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+            <i  data-lucide="instagram"></i>
+          </a>
+          <a href="https://github.com/coder-abhi07" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
+            <i  data-lucide="github"></i>
+          </a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Question Paper Analyzer. All rights reserved.</p>
+        <p>Created by Abhishek Kumar</p>
+      </div>
+    </div>
+  </footer>
+
+ <div id="toast-container"></div>
+ <script src="{% static 'script.js' %}"></script>
+    
+</body>
+</html>

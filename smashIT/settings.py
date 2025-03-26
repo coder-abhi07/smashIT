@@ -39,8 +39,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 'True'
-DEBUG = True
+DEBUG = os.getenv('DEBUG').lower() == 'true'
 
 ALLOWED_HOSTS = ["*"]
 
@@ -64,6 +63,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github', 
 
 ]
 
@@ -219,7 +219,16 @@ SOCIALACCOUNT_PROVIDERS = {
             "access_type": "online",
         },
         "OAUTH_PKCE_ENABLED": True,  # PKCE improves security
-    }
+    },
+    'github': {
+         "SCOPE": [
+            "read:user",  
+            "user:email",  
+        ],
+        "AUTH_PARAMS": {
+            "allow_signup": "true",
+        },
+    },
 }
 
 CSRF_TRUSTED_ORIGINS = [
@@ -236,3 +245,5 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 SOCIALACCOUNT_ADAPTER = "convert.adapters.CustomSocialAccountAdapter"
+
+AUTH_USER_MODEL = 'convert.CustomUser'

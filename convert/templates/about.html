@@ -1,157 +1,245 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>About
-    </title>
-
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static '/icon/apple-touch-icon.png' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static '/icon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" href="{% static '/icon/favicon.ico'%}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static '/icon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static '/icon/site.webmanifest' %}" />
-
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Question Paper Analyzer</title>
+  <meta name="description" content="Learn about the Question Paper Analyzer project">
+  <link rel="icon" type="image/png" href="../lovable-uploads/8c78b318-5901-4c2b-ab15-7eb2d9965bd6.png">
+  <link rel="stylesheet" href="{% static '/styles.css'%}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static/font/Lucide.css">
+ 
 </head>
-
 <body>
-
-    <header class="header">
+  <div class="app">
+    <!-- Header/Navbar -->
+    <header class="navbar">
+      <div class="navbar-container">
         <div class="logo">
-            <img src="{% static 'icon/favicon.ico' %}" alt="logo" />
-            <div class="waviy">
-                <span style="--i:1">S</span>
-                <span style="--i:2">m</span>
-                <span style="--i:3">a</span>
-                <span style="--i:4">s</span>
-                <span style="--i:5">h</span>
-                <span style="--i:6">I</span>
-                <span style="--i:7">T</span>
-                <span style="--i:8">.</span>
-            </div>
+          <a href="#">
+            <img src="{% static '/logo.png' %}" alt="Logo" class="logo-img">
+            <span >Question Paper Analyzer</span>
+          </a>
         </div>
-        <nav class="navbar">
-            <ul class="navbar-list">
-                {% if user.is_authenticated %}
-                <li> <a class="navbar-link" href="{% url 'logout' %}" id="qsLogoutBtn">Logout</a></li>
-                {% else %}
-                <li> <a class="navbar-link" href="{% url 'login' %}" id="qsLoginBtn"><ion-icon
-                            name="person-sharp"></ion-icon>Login</a></li>
-                {% endif %}
-                <li><a class="navbar-link" href="{% url 'index' %}">Home</a></li>
-                <li><a class="navbar-link" href="{% url 'about' %}">About</a></li>
-                <li><a class="navbar-link" href="#contactMe">Contact</a></li>
+
+        
+        
+        <nav class="desktop-nav">
+          <ul>
+            <li><a href="{% url 'index' %}" >Home</a></li>
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="#" class="active">About</a></li>
+          </ul>
+          
+          
+          <div class="theme-toggle">
+            <button id="themeToggle" aria-label="Toggle theme">
+              <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+              <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+            </button>
+          </div>
+          
+        {% if user.is_authenticated %}
+        <div class="user-menu">
+          <button class="user-button" id="userMenuButton">
+            {% if user.avatar_url%}
+            <span class="user-avatar"><img src="{{user.avatar_url}} "  alt="avatar"></span>
+            {% else %}
+            <span class="user-avatar">{{ user.username|first|upper }}</span>
+            {% endif %}
+            <span class="user-name">{{ user.first_name}}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <ul>
+              <li>
+                <a href="{% url 'user_profile' %}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  Profile
+                </a>
+              </li>
+              <li>
+                
+                <a id="logoutButton" href="{% url 'logout'%}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                  Logout
+                </a>
+              </li>
+          
             </ul>
+          </div>
+        </div>
+          {% else %}
+          <div class="auth-buttons">
+            <a href="{% url 'login' %}" class="login-button">Login</a>
+            <a href="{% url 'signup' %}" class="register-button">Register</a>
+          </div>
+          {% endif %}
         </nav>
-
-        <div class="mobile-navbar-btn">
-            <ion-icon name="menu-outline" class="mobile-nav-icon"></ion-icon>
-            <ion-icon name="close-outline" class="mobile-nav-icon"></ion-icon>
+        
+        <button class="mobile-menu-button" aria-label="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+        </button>
+      </div>
+      
+      <!-- Mobile Navigation Menu -->
+      <div class="mobile-menu">
+        <nav>
+          <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="#" class = "active">About</a></li>
+          </ul>
+          
+         
+            
+        {% if user.is_authenticated %}
+        <div class="user-menu">
+          <button class="user-button" id="userMenuButton2">
+            {% if user.avatar_url%}
+            <span class="user-avatar"><img src="{{user.avatar_url}} "  alt="avatar"></span>
+            {% else %}
+            <span class="user-avatar">{{ user.username|first|upper }}</span>
+            {% endif %}
+           
+            <span class="user-name">{{ user.first_name}}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="user-dropdown" id="userDropdown2">
+            <ul>
+              <li>
+                <a href="{% url 'user_profile' %}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  Profile
+                </a>
+              </li>
+              <li>
+                
+                <a id="logoutButton" href="{% url 'logout'%}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                  Logout
+                </a>
+              </li>
+          
+            </ul>
+          </div>
         </div>
+        {% else %}
+          <div class="mobile-auth-buttons">
+            <a href="{% url 'login' %}" class="login-button">Login</a>
+            <a href="{% url 'signup' %}" class="register-button">Register</a>
+          </div>
+          {% endif %}
 
+          <div class="theme-toggle">
+            <button id="themeToggle2" aria-label="Toggle theme">
+              <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+              <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+            </button>
+          </div>
+
+        </nav>
+      </div>
+
+      
     </header>
+    <!-- Main Content -->
+    <main>
+      <div class="about-page">
+        <section class="about-hero">
+          <div class="about-hero-content">
+            <h1>About Question Paper Analyzer</h1>
+            <p>Revolutionizing education assessment with AI</p>
+          </div>
+        </section>
 
-    <div class="wave-svg-design">
-        <div class="custom-shape-divider-top-1697723717">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
-                preserveAspectRatio="none">
-                <path
-                    d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
-                    class="shape-fill"></path>
-            </svg>
-        </div>
-    </div>
+        <section class="about-mission">
+          <div class="mission-content">
+            <h2>Our Mission</h2>
+            <p>At Question Paper Analyzer, we're on a mission to transform the way educational institutions create, analyze, and optimize assessment materials. We believe that well-designed question papers are fundamental to effective learning assessment, and our AI-powered tools make it easier than ever to create balanced, fair, and effective assessments.</p>
+            <p>Our goal is to empower educators with insights that were previously difficult to obtain, allowing them to focus more on teaching and less on administrative tasks.</p>
+          </div>
+        </section>
 
+        <section class="about-how-it-works">
+          <h2>How It Works</h2>
+          <div class="workflow-steps">
+            <div class="workflow-step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h3>Upload</h3>
+                <p>Upload your question paper in PDF, JPG, or PNG format. Our system accepts various document types to accommodate different needs.</p>
+              </div>
+            </div>
+            <div class="workflow-step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h3>Process</h3>
+                <p>Our advanced OCR technology extracts the text from your document and processes it to identify questions, options, and other components.</p>
+              </div>
+            </div>
+            <div class="workflow-step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h3>Analyze</h3>
+                <p>Our AI analyzes the content, categorizing questions by difficulty, cognitive level, and topic. It identifies patterns and provides statistical insights.</p>
+              </div>
+            </div>
+            <div class="workflow-step">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h3>Report</h3>
+                <p>Receive a comprehensive report with visualizations and actionable recommendations to improve your assessment materials.</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-    
-<div class="about-section">
-    <div class="inner-container">
-        <h1>About </h1>
-        <p class="text">
+      </div>
+    </main>
 
-            Welcome to Question Paper Analyzer! This is Abhishek kumar, a student at Himachal Pradesh Technical University (HPTU),
-            passionate about technology and coding.
-            <br>
-            This platform is dedicated to simplifying your academic journey. It provides students with curated lists of
-            essential questions, simplifying the process of understanding question paper patterns.
-            <br>
-            Just upload your question paper, and watch the magic unfold. The website automatically organizes and
-            presents vital questions, making exam preparation more efficient.
-            <br>
-            Join our student community, connect with like-minded peers, and empower your education. Let's explore,
-            learn, and excel in technology and coding together.
-            <br>
-        </p>
-
-    </div>
-</div>
-
-
-
-
-    <hr class="dotted-line">
-    
+    <!-- Footer -->
     <footer class="footer">
-        <div class="waves">
-            <div class="wave" id="wave1"></div>
-            <div class="wave" id="wave2"></div>
-            <div class="wave" id="wave3"></div>
-            <div class="wave" id="wave4"></div>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-text">
+            <h3>Question Paper Analyzer</h3>
+            <p>Smash-IT: Simplifying your academic journey with AI-powered question paper analysis.</p>
+          </div>
+          <div class="social-links">
+            <a href="https://www.facebook.com/profile.php?id=100028091352527&sk=grid" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+              <i  data-lucide="facebook"></i>
+            </a>
+            <a href="https://twitter.com/coder_abhi07" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Twitter">
+              <i  data-lucide="twitter"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/abhishek-kumar-573418164/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
+              <i  data-lucide="linkedin"></i>
+            </a>
+            <a href="https://www.instagram.com/this_isabhi07/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+              <i  data-lucide="instagram"></i>
+            </a>
+            <a href="https://github.com/coder-abhi07" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
+              <i  data-lucide="github"></i>
+            </a>
+          </div>
         </div>
-        <ul id="contactMe" class="social-icon">
-            <li class="social-icon__item"><a class="social-icon__link" target="_blank"
-                    href="https://www.facebook.com/profile.php?id=100028091352527&sk=grid">
-                    <ion-icon name="logo-facebook"></ion-icon>
-                </a></li>
-            <li class="social-icon__item"><a class="social-icon__link" target="_blank"
-                    href="https://twitter.com/coder_abhi07">
-                    <ion-icon name="logo-twitter"></ion-icon>
-                </a></li>
-            <li class="social-icon__item"><a class="social-icon__link" target="_blank"
-                    href="https://www.linkedin.com/in/abhishek-kumar-573418164/">
-                    <ion-icon name="logo-linkedin"></ion-icon>
-                </a></li>
-            <li class="social-icon__item"><a class="social-icon__link" target="_blank"
-                    href="https://www.instagram.com/this_isabhi07/">
-                    <ion-icon name="logo-instagram"></ion-icon>
-                </a></li>
-        </ul>
-    
-    
-        <p>&copy; <span id="year"></span>
-            SmashIT | All Rights Reserved</p>
+        <div class="footer-bottom">
+          <p>© 2025 Question Paper Analyzer. All rights reserved.</p>
+          <p>Created by Abhishek Kumar</p>
+        </div>
+      </div>
     </footer>
-    <script>
 
+  </div>
+  <!-- Toast notifications container -->
+  <div id="toast-container"></div>
 
-
-    document.getElementById("year").innerHTML = new Date().getFullYear();
-    const mobile_nav = document.querySelector(".mobile-navbar-btn");
-    const nav_header = document.querySelector(".header");
-
-    const toggleNavbar = () => {
-
-        nav_header.classList.toggle("active");
-    };
-
-    mobile_nav.addEventListener("click", () => toggleNavbar());
-
-    </script>
-    
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    
-    
-    </body>
-    
+  <script src="{% static '/script.js' %}"></script>
+ 
+</body>
 </html>

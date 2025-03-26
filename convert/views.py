@@ -6,9 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm, UserCreationForm
 from django.contrib import messages
 from .models import MyForm
-from .forms import UserUpdateForm
-
-
+from .forms import UserUpdateForm, CustomUserSignupForm
+ 
 # def textResponse(request):
 #     if request.method == 'POST' and request.FILES.getlist('myfile'):
 #         parsed_text = []
@@ -41,16 +40,14 @@ from django.conf import settings
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 
-class MyForm(forms.Form):
-    my_textarea = forms.CharField(widget=forms.Textarea, required=False)
-
 def textResponse(request):
-    """Extract text using OCR.space and display it in a form."""
+    """Extract text using OCR.space, apply clustering, and display the result."""
     if request.method == 'POST' and request.FILES.getlist('myfile'):
         parsed_text = []
         api_key = settings.OCR_API_KEY
         payload = {"apikey": api_key, "OCREngine": 2, "isTable": True}
 
+        # Extract text from uploaded files
         for file in request.FILES.getlist('myfile'):
             response = requests.post("https://api.ocr.space/parse/image", files={file.name: file}, data=payload)
             results = response.json()
@@ -58,20 +55,12 @@ def textResponse(request):
                 parsed_text.append(result.get("ParsedText", ""))
 
         ocr_text = "\n".join(parsed_text)  # Combine extracted text
-        form = MyForm(initial={'my_textarea': ocr_text})  # Set initial text
+        clustered_text = cluster_text(ocr_text)  # Apply clustering directly
 
-        return render(request, "result.html", {"form": form})
+        return render(request, "result.html", {"clustered_text": clustered_text})  # Pass to template
+    
+    return redirect("dashboard")
 
-def finalResult(request):
-    """Take user-reviewed text and apply clustering."""
-    if request.method == 'POST':
-        form = MyForm(request.POST)  # Just get the text directly from the form
-        if form.is_valid():
-            user_text = form.cleaned_data['my_textarea']  # No extra processing
-            clustered_text = cluster_text(user_text)  # Apply clustering
-            
-            finalForm = MyForm(initial={'my_textarea': clustered_text})  # Update form with clusters
-            return render(request, "result.html", {"finalForm": finalForm})  # Use 'finalform' as expected
 
 def cluster_text(text):
     """Cluster text using KMeans with TF-IDF vectorization."""
@@ -84,17 +73,77 @@ def cluster_text(text):
     vectorizer = TfidfVectorizer(stop_words="english")
     X = vectorizer.fit_transform(sentences)
 
-    num_clusters = min(5, len(sentences))  # Limit clusters
+    num_clusters = min(5, len(sentences))  # Limit clusters to max 5
     kmeans = KMeans(n_clusters=num_clusters, random_state=42, n_init=10)
     labels = kmeans.fit_predict(X)
 
-    clustered_output = ""
+    clustered_text = '<div id="clustered-text">'  # Wrap everything in a div
     for i in range(num_clusters):
-        clustered_output += f"Cluster {i+1}:\n"
-        clustered_output += "\n".join([sentences[j] for j in range(len(sentences)) if labels[j] == i])
-        clustered_output += "\n\n"
+        clustered_text += f'<div class="cluster"><h2>Cluster {i+1}</h2><p>'
+        clustered_text += "<br>".join([sentences[j] for j in range(len(sentences)) if labels[j] == i])
+        clustered_text += "</p></div>"
 
-    return clustered_output
+    clustered_text += "</div>"
+
+    return clustered_text
+
+
+# class MyForm(forms.Form):
+#     my_textarea = forms.CharField(widget=forms.Textarea, required=False)
+
+# def textResponse(request):
+#     """Extract text using OCR.space and display it in a form."""
+#     if request.method == 'POST' and request.FILES.getlist('myfile'):
+#         parsed_text = []
+#         api_key = settings.OCR_API_KEY
+#         payload = {"apikey": api_key, "OCREngine": 2, "isTable": True}
+
+#         for file in request.FILES.getlist('myfile'):
+#             response = requests.post("https://api.ocr.space/parse/image", files={file.name: file}, data=payload)
+#             results = response.json()
+#             for result in results.get("ParsedResults", []):
+#                 parsed_text.append(result.get("ParsedText", ""))
+
+#         ocr_text = "\n".join(parsed_text)  # Combine extracted text
+#         form = MyForm(initial={'my_textarea': ocr_text})  # Set initial text
+
+#         return render(request, "result.html", {"form": form})
+
+#     return redirect("dashboard")
+
+# def finalResult(request):
+#     """Take user-reviewed text and apply clustering."""
+#     if request.method == 'POST':
+#         form = MyForm(request.POST)  # Just get the text directly from the form
+#         if form.is_valid():
+#             user_text = form.cleaned_data['my_textarea']  # No extra processing
+#             clustered_text = cluster_text(user_text)  # Apply clustering
+            
+#             finalForm = MyForm(initial={'my_textarea': clustered_text})  # Update form with clusters
+#             return render(request, "result.html", {"finalForm": finalForm})  # Use 'finalform' as expected
+
+# def cluster_text(text):
+#     """Cluster text using KMeans with TF-IDF vectorization."""
+#     sentences = [s.strip() for s in text.split("\n") if s.strip()]  # Split into sentences
+
+#     if len(sentences) < 2:
+#         return "Not enough text to cluster."
+
+#     # Convert text into TF-IDF feature vectors
+#     vectorizer = TfidfVectorizer(stop_words="english")
+#     X = vectorizer.fit_transform(sentences)
+
+#     num_clusters = min(5, len(sentences))  # Limit clusters
+#     kmeans = KMeans(n_clusters=num_clusters, random_state=42, n_init=10)
+#     labels = kmeans.fit_predict(X)
+
+#     clustered_output = ""
+#     for i in range(num_clusters):
+#         clustered_output += f"Cluster {i+1}:\n"
+#         clustered_output += "\n".join([sentences[j] for j in range(len(sentences)) if labels[j] == i])
+#         clustered_output += "\n\n"
+
+#     return clustered_output
 
 
 # # ////////////////////////
@@ -168,8 +217,8 @@ def cluster_text(text):
 
 
 
-def custom_page_not_found_view(request, exception):
-    return render(request, "404.html", {"error_message": "The page you are looking for does not exist."}, status=404)
+def custom_page_not_found_view(request, exception = None):
+    return render(request, "404.html")
 
 
 def custom_error_view(request, exception=None):
@@ -234,19 +283,27 @@ def set_password(request):
 
 def signup_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserSignupForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
+            
             login(request, user)
             return redirect('index')
     else:
-        form = UserCreationForm()
+        form = CustomUserSignupForm()
     return render(request, 'signup.html', {'form': form})
 
 
+def dashboard(request):
+    if (request.method == "POST"):
+        return redirect ("textResponse")
+
+    return render(request, "dashboard.html")
+    
+    
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
