@@ -220,9 +220,11 @@ SOCIALACCOUNT_ADAPTER = "convert.adapters.CustomSocialAccountAdapter"
 AUTH_USER_MODEL = 'convert.CustomUser'
 
 #production
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 IS_PRODUCTION = os.getenv("DJANGO_PRODUCTION", "true").lower() == "true"
-
+if (not IS_PRODUCTION):
+    DEBUG = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https" if IS_PRODUCTION else "http"
 SECURE_SSL_REDIRECT = IS_PRODUCTION
 CSRF_COOKIE_SECURE = IS_PRODUCTION

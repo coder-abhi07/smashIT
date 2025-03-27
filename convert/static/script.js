@@ -383,39 +383,93 @@ document.addEventListener('DOMContentLoaded', function() {
       filesContainer.style.display = 'none';
     });
 
-    // Analyze files (simulate)
-    analyzeBtn.addEventListener('click', (event) => {
-      const count = filesList.querySelectorAll('.file-item').length;
-      if (count === 0) {
-        alert('No files to analyze. Please upload at least one file.');
+    // // Analyze files (simulate)
+    // analyzeBtn.addEventListener('click', (event) => {
+    //   const count = filesList.querySelectorAll('.file-item').length;
+    //   if (count === 0) {
+    //     alert('No files to analyze. Please upload at least one file.');
         
-        return;
-      }
+    //     return;
+    //   }
       
-      event.preventDefault(); // Stop form submission
+    //   event.preventDefault(); // Stop form submission
     
-      // Change button to loading state
-      analyzeBtn.disabled = true;
-      analyzeBtn.innerHTML = `
-        <i data-lucide="loader-2" size="16" class="animate-spin"></i>
-        Analyzing...
-      `;
-      lucide.createIcons();
+    //   // Change button to loading state
+    //   analyzeBtn.disabled = true;
+    //   analyzeBtn.innerHTML = `
+    //     <i data-lucide="loader-2" size="16" class="animate-spin"></i>
+    //     Analyzing...
+    //   `;
+    //   lucide.createIcons();
       
-      // Simulate analysis
-      setTimeout(() => {
-        showToast('please wait...', 'info');
-        analyzeBtn.disabled = false;
-        analyzeBtn.innerHTML = `
-          <i data-lucide="scan-search" size="16"></i>
-          Analyze
-        `;
-        lucide.createIcons();
+    //   // Simulate analysis
+    //   setTimeout(() => {
+    //     showToast('please wait...', 'info');
+    //     analyzeBtn.disabled = false;
+    //     analyzeBtn.innerHTML = `
+    //       <i data-lucide="scan-search" size="16"></i>
+    //       Analyze
+    //     `;
+    //     lucide.createIcons();
         
        
        
-      }, 2000);
+    //   }, 2000);
+    // });
+
+    const analyze2 = document.querySelector('.btn.btn-sm.btn-primary');
+  const file2 = document.querySelector("#files-container");
+  const form = document.querySelector("form");
+  const removeButtons = document.querySelectorAll('.remove-file');
+
+  if (!analyze2 || !file2 || !form) {
+    console.error('One or more required elements not found');
+    return;
+  }
+
+  analyze2.addEventListener("click", (event) => {
+    const count = file2.querySelectorAll(".file-item").length;
+    if (count === 0) {
+      alert("No files to analyze. Please upload at least one file.");
+      return;
+    }
+
+    event.preventDefault(); // Prevent default form submission
+
+    // Clear existing content and add spinner
+    analyze2.innerHTML = `
+      <i 
+        data-lucide="loader"  
+        style="display: inline-block; animation: spin 1s linear infinite;"
+      ></i>
+      Analyzing...
+    `;
+    clearBtn.disabled = true;
+    analyze2.disabled = true;
+    removeButtons.forEach(button => {
+      button.disabled = true;
     });
+
+    // Multiple approaches to ensure icon rendering and spinning
+    if (window.lucide) {
+      try {
+        lucide.createIcons();
+      } catch (error) {
+        console.error('Lucide icon rendering failed:', error);
+      }
+    }
+
+    // Fallback to ensure form submission
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        form.submit();
+      }, 100);
+    });
+  });
+    
+
+
+
 
     // Helper function for file size formatting
     function formatFileSize(bytes) {

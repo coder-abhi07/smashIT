@@ -259,9 +259,6 @@ main {
   background-color: var(--secondary);
 }
 
-.register-button {
-  /* nothing */
-}
 
 .register-button:hover, .register-button.active {
   background-color: var(--accent);
@@ -2039,3 +2036,21 @@ svg.lucide.lucide-settings {
   color: var(--muted-foreground);
   font-size: 0.9rem;
 }
+
+/* Ensure spinning animation works */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+svg.lucide.lucide-loader {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  transform: translateZ(0);
+  will-change: transform;
+
+}
+
