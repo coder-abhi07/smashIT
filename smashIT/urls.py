@@ -13,9 +13,9 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 
 
-# sitemaps = {
-#     'custom': CustomSitemap,
-# }
+sitemaps = {
+    'custom': CustomSitemap,
+}
 
 
 handler404 = 'convert.views.custom_page_not_found_view'
@@ -27,8 +27,8 @@ handler400 = 'convert.views.custom_bad_request_view'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('convert.urls')),
-    # path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    # path("robots.txt",TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path("robots.txt",TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('static/icon/favicon.ico')))
 ]
 

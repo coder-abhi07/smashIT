@@ -6,21 +6,14 @@ class CustomSitemap(sitemaps.Sitemap):
     protocol = 'https'
     priority = 1.0
 
+    priority = 1.0
+    changefreq = 'daily'
+
     def items(self):
-        # Return a list of URL names you want to include in the sitemap
-        return ['index', 'login', 'logout', 'callback', 'result']
+        return ['index', 'about', 'login', 'signup', 'dashboard']
 
     def location(self, item):
-        # Define the URL for each item in the sitemap
-        if item == 'index':
-            return reverse('index')
-        if item == 'login':
-            return reverse('login')
-        if item == 'logout':
-            return reverse('logout')
-        if item == 'callback':
-            return reverse('callback')
-        if item == 'result':
-            return reverse('result')
-        
-        
+        return reverse(item)  # More concise way to handle all routes
+    
+    
+    
