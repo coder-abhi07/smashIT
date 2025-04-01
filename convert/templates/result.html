@@ -12,6 +12,7 @@
     <link rel = "icon" type = "image/png" href = "{% static '/icon/favicon.ico'%}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static '/icon/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static '/icon/site.webmanifest' %}" />
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   
@@ -25,13 +26,12 @@
     
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <link rel="stylesheet" type="text/css"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="https://unpkg.com/lucide-static/font/Lucide.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-</head>
+    <link rel="stylesheet" href="https://unpkg.com/lucide-static/font/Lucide.css">
+  </head>
+
 <body>
   {% load socialaccount %}
 
@@ -167,21 +167,749 @@
 
       
     </header>
+    <style>
+      /* Modern Result Page Styles */
+.result-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: var(--text-color);
+}
+
+.result-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.result-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--brand-green), var(--brand-green-dark));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  display: inline-block;
+}
+
+.result-header h1:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--brand-green), var(--brand-green-light));
+}
+
+.result-header p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  margin-top: 1.2rem;
+}
+
+/* Modernized Tabs */
+.tabs-container {
+  margin-bottom: 2.5rem;
+}
+
+.tabs {
+  display: flex;
+  background-color: var(--bg-muted);
+  border-radius: var(--radius-lg);
+  padding: 0.5rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  position: sticky;
+  top: var(--header-height);
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+
+.tab {
+  padding: 0.9rem 1.3rem;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+}
+
+.tab i, .tab svg {
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  background-color: var(--brand-green);
+  color: white;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.tab.active i, .tab.active svg {
+  opacity: 1;
+}
+
+.tab:not(.active):hover {
+  background-color: rgba(var(--brand-green-rgb), 0.1);
+  transform: translateY(-1px);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: slideUpFade 0.4s ease-out;
+}
+
+@keyframes slideUpFade {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Cards */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.8rem;
+  margin-bottom: 2.5rem;
+}
+
+.analysis-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 1px solid var(--border-color);
+}
+
+.analysis-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(var(--brand-green-rgb), 0.3);
+}
+
+.card-header {
+  padding: 1.4rem;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background-color: rgba(var(--brand-green-rgb), 0.03);
+}
+
+.card-header i, .card-header svg {
+  color: var(--brand-green);
+}
+
+.card-body {
+  padding: 1.8rem;
+}
+
+/* Improved Difficulty Bars */
+.difficulty-bar {
+  height: 10px;
+  border-radius: 5px;
+  margin-top: 0.8rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--bg-muted);
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.difficulty-progress {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 5px;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.easy {
+  background: linear-gradient(90deg, #52b788, #40916c);
+  box-shadow: 0 0 8px rgba(82, 183, 136, 0.4);
+}
+
+.medium {
+  background: linear-gradient(90deg, #3f8efc, #2563eb);
+  box-shadow: 0 0 8px rgba(63, 142, 252, 0.4);
+}
+
+.hard {
+  background: linear-gradient(90deg, #e63946, #c1121f);
+  box-shadow: 0 0 8px rgba(230, 57, 70, 0.4);
+}
+
+.difficulty-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Enhanced Topic Chips */
+.topics-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.topic-chip {
+  background-color: rgba(var(--brand-green-rgb), 0.1);
+  color: var(--brand-green);
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(var(--brand-green-rgb), 0.1);
+}
+
+.topic-chip:hover {
+  background-color: rgba(var(--brand-green-rgb), 0.15);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  border-color: rgba(var(--brand-green-rgb), 0.2);
+}
+
+/* Improved Insights */
+.insights-container {
+  margin-top: 1rem;
+}
+
+.insight-item {
+  background-color: var(--bg-secondary);
+  border-left: 4px solid var(--brand-green);
+  padding: 1.5rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.insight-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateX(3px);
+}
+
+.insight-title {
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  color: var(--brand-green);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.05rem;
+}
+
+.insight-content {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+/* Enhanced Questions */
+.frequent-questions {
+  margin-top: 1.5rem;
+}
+
+.question-item {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.question-item:hover {
+  box-shadow: var(--shadow-md);
+  border-color: rgba(var(--brand-green-rgb), 0.3);
+}
+
+.question-badge {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--brand-green), var(--brand-green-dark));
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 50px;
+  margin-bottom: 0.7rem;
+  box-shadow: 0 2px 5px rgba(var(--brand-green-rgb), 0.3);
+}
+
+/* Original Text Container */
+.original-text-container {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  max-height: 600px;
+  overflow-y: auto;
+  box-shadow: var(--shadow-md);
+  white-space: pre-wrap;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  border: 1px solid var(--border-color);
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand-green) var(--bg-muted);
+}
+
+.original-text-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.original-text-container::-webkit-scrollbar-track {
+  background: var(--bg-muted);
+  border-radius: 4px;
+}
+
+.original-text-container::-webkit-scrollbar-thumb {
+  background-color: var(--brand-green);
+  border-radius: 4px;
+}
+
+/* Clustered Questions Section */
+.clustered-questions {
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+}
+
+.clustered-questions h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+}
+
+.clustered-questions h2:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 70%;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--brand-green), transparent);
+}
+
+.cluster-container {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.cluster-container:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-5px);
+}
+
+.cluster-header {
+  background: linear-gradient(90deg, var(--brand-green), var(--brand-green-dark));
+  color: white;
+  padding: 1.2rem 1.8rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.cluster-body {
+  padding: 1.8rem;
+}
+
+/* Study Strategy Card Enhancements */
+.study-focus-area {
+  margin-top: 2.5rem;
+}
+
+.study-focus-area h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+
+.focus-area-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.focus-area-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(var(--brand-green-rgb), 0.3);
+}
+
+.focus-area-icon {
+  background-color: rgba(var(--brand-green-rgb), 0.1);
+  color: var(--brand-green);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.mistakes-to-avoid {
+  margin-top: 2.5rem;
+  background-color: rgba(var(--error-rgb), 0.05);
+  border-left: 4px solid var(--error);
+  padding: 1.5rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.mistakes-to-avoid h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--error);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+}
+
+.mistakes-to-avoid ul {
+  margin: 0;
+  padding-left: 1.8rem;
+}
+
+.mistakes-to-avoid li {
+  margin-bottom: 0.6rem;
+  line-height: 1.6;
+}
+
+.mistakes-to-avoid li:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .result-container {
+    padding: 1.2rem;
+  }
+  
+  .result-header h1 {
+    font-size: 2rem;
+  }
+  
+  .analysis-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .tabs {
+    padding: 0.4rem;
+  }
+  
+  .tab {
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .card-header {
+    padding: 1.2rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .clustered-questions h2 {
+    font-size: 1.6rem;
+  }
+}
+
+/* Custom Animations */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.highlight-pulse {
+  animation: pulse 2s infinite;
+}
+
+    </style>
 
 
-  <main>
-      <div class="grouped-text">
-        <h1> Grouped Questions </h1>
-          
+
+    <!-- Keep existing head and header code -->
+
+
+
+  <!-- Main section with improved styling -->
+<main>
+  <div class="result-container">
+    <div class="result-header">
+      <h1>Analysis Results</h1>
+      <p>AI-powered insights to help you understand and prepare better</p>
+    </div>
+
+    <!-- Tabs Navigation with enhanced styling -->
+    <div class="tabs-container">
+      <div class="tabs">
+        <div class="tab active" data-tab="overview">
+          <i data-lucide="pie-chart" width="18" height="18"></i>
+          Overview
+        </div>
+        <div class="tab" data-tab="insights">
+          <i data-lucide="lightbulb" width="18" height="18"></i>
+          Insights
+        </div>
+        <div class="tab" data-tab="detailed">
+          <i data-lucide="clipboard-list" width="18" height="18"></i>
+          Detailed Analysis
+        </div>
+        <div class="tab" data-tab="original">
+          <i data-lucide="file-text" width="18" height="18"></i>
+          Original Text
+        </div>
       </div>
 
+      <!-- Tab Contents with improved styling -->
+      <div class="tab-content active" id="overview-content">
+        <div class="analysis-grid">
+          <!-- Difficulty Distribution Card -->
+          <div class="analysis-card">
+            <div class="card-header">
+              <i data-lucide="bar-chart-2" width="20" height="20"></i>
+              Difficulty Distribution
+            </div>
+            <div class="card-body">
+              <div>
+                <div class="difficulty-label">
+                  <span>Easy</span>
+                  <span>{{ analysis_result.difficultyDistribution.easy|floatformat:0 }}%</span>
+                </div>
+                <div class="difficulty-bar">
+                  <div class="difficulty-progress easy" style="width: {{ analysis_result.difficultyDistribution.easy|floatformat:0 }}%"></div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="difficulty-label">
+                  <span>Medium</span>
+                  <span>{{ analysis_result.difficultyDistribution.medium|floatformat:0 }}%</span>
+                </div>
+                <div class="difficulty-bar">
+                  <div class="difficulty-progress medium" style="width: {{ analysis_result.difficultyDistribution.medium|floatformat:0 }}%"></div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="difficulty-label">
+                  <span>Hard</span>
+                  <span>{{ analysis_result.difficultyDistribution.hard|floatformat:0 }}%</span>
+                </div>
+                <div class="difficulty-bar">
+                  <div class="difficulty-progress hard" style="width: {{ analysis_result.difficultyDistribution.hard|floatformat:0 }}%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topics Card -->
+          <div class="analysis-card">
+            <div class="card-header">
+              <i data-lucide="book-open" width="20" height="20"></i>
+              Topics Coverage
+            </div>
+            <div class="card-body">
+              <div class="topics-container">
+                {% for topic in analysis_result.topics %}
+                <div class="topic-chip">
+                  <i data-lucide="bookmark" width="16" height="16"></i>
+                  {{ topic }}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Stats Card -->
+        <div class="analysis-card">
+          <div class="card-header">
+            <i data-lucide="activity" width="20" height="20"></i>
+            Key Insights
+          </div>
+          <div class="card-body">
+            <div class="insights-container">
+              {% for insight in analysis_result.keyInsights|slice:":3" %}
+              <div class="insight-item">
+                <div class="insight-title">
+                  <i data-lucide="zap" width="16" height="16"></i>
+                  Insight {{ forloop.counter }}
+                </div>
+                <div class="insight-content">
+                  {{ insight }}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="insights-content">
+        <div class="analysis-card">
+          <div class="card-header">
+            <i data-lucide="lightbulb" width="20" height="20"></i>
+            All Key Insights
+          </div>
+          <div class="card-body">
+            <div class="insights-container">
+              {% for insight in analysis_result.keyInsights %}
+              <div class="insight-item">
+                <div class="insight-title">
+                  <i data-lucide="zap" width="16" height="16"></i>
+                  Insight {{ forloop.counter }}
+                </div>
+                <div class="insight-content">
+                  {{ insight }}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="detailed-content">
+        <div class="analysis-card">
+          <div class="card-header">
+            <i data-lucide="help-circle" width="20" height="20"></i>
+            Frequently Asked Questions
+          </div>
+          <div class="card-body">
+            <div class="frequent-questions">
+              {% for question in analysis_result.frequentQuestions %}
+              <div class="question-item">
+                <div class="question-badge">Question Type {{ forloop.counter }}</div>
+                <p>{{ question }}</p>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="analysis-card" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            <i data-lucide="trending-up" width="20" height="20"></i>
+            Study Strategy & Recommendations
+          </div>
+          <div class="card-body">
+            <p>{{ analysis_result.detailedAnalysis|linebreaksbr }}</p>
+            
+            <div class="study-focus-area">
+              <h3>Study Focus Areas</h3>
+              <div class="analysis-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                {% for topic in analysis_result.topics|slice:":3" %}
+                <div class="focus-area-card">
+                  <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;">
+                    <div class="focus-area-icon">
+                      <i data-lucide="target" width="22" height="22"></i>
+                    </div>
+                    <h4 style="margin: 0; font-size: 1.1rem; font-weight: 600;">Focus Area {{ forloop.counter }}</h4>
+                  </div>
+                  <p style="margin: 0; font-size: 0.95rem; line-height: 1.6;">Focus on {{ topic }} as it appears frequently and requires thorough understanding.</p>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="mistakes-to-avoid">
+              <h3>
+                <i data-lucide="alert-triangle" width="22" height="22"></i>
+                Common Mistakes to Avoid
+              </h3>
+              <ul>
+                <li>Skipping conceptual questions can cost easy marks</li>
+                <li>Don't spend too much time on hard questions initially</li>
+                <li>Pay attention to marking schemes when provided</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="original-content">
+        <div class="analysis-card">
+          <div class="card-header">
+            <i data-lucide="file-text" width="20" height="20"></i>
+            Original Question Paper Text
+          </div>
+          <div class="card-body">
+            <div class="original-text-container">
+              {{ original_text }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clustered Questions Section - keeping as is per instruction -->
+    <div class="clustered-questions">
+      <h2>Grouped Questions</h2>
       {% if clustered_text %}
-        
-          {{clustered_text|safe}}
-        
+        {{ clustered_text|safe }}
+      {% else %}
+        <div class="cluster-container">
+          <div class="cluster-body">
+            <p>No grouped questions available for this analysis.</p>
+          </div>
+        </div>
       {% endif %}
-    
-    </main>
+    </div>
+  </div>
+</main>
+
+
+
+<!-- Keep existing footer code -->
+
+
+
+  
 
     <!-- Footer -->
     <footer class="footer">
@@ -227,37 +955,138 @@
   <script src="{% static 'script.js' %}"></script>
 
   <script>
-     document.getElementById("copyButton").addEventListener("click", function () {
-        
-        var textArea = document.querySelector(".my_textarea");
-        textArea.select();
-
-        document.execCommand("copy");
-
-        textArea.blur();
-
-        // Update the button text
-        this.innerHTML = "Copied!";
-
-        // Reset the button text after a brief delay
-        setTimeout(function () {
-          document.getElementById("copyButton").innerHTML = "Copy to Clipboard";
-        }, 1000);
+    // Tab Switching Logic
+    
+    // Enhanced JavaScript for Result Page
+document.addEventListener('DOMContentLoaded', function() {
+  // Tab Switching Logic with smooth transitions
+  const tabs = document.querySelectorAll('.tab');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active class from all tabs and contents
+      tabs.forEach(t => t.classList.remove('active'));
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+        content.style.display = 'none';
       });
+      
+      // Add active class to clicked tab
+      tab.classList.add('active');
+      
+      // Show corresponding content with animation
+      const tabId = tab.getAttribute('data-tab');
+      const activeContent = document.getElementById(`${tabId}-content`);
+      activeContent.style.display = 'block';
+      
+      // Force reflow
+      void activeContent.offsetWidth;
+      
+      activeContent.classList.add('active');
+    });
+  });
 
-
-      function calcHeight(value) {
-        let numberOfLineBreaks = (value.match(/\n/g) || []).length;
-        // min-height + lines x line-height + padding + border
-        let newHeight = 20 + numberOfLineBreaks * 20 + 12 + 2;
-        return newHeight;
+  // Animate difficulty bars on load with sequential animation
+  const animateBars = () => {
+    const progressBars = document.querySelectorAll('.difficulty-progress');
+    
+    progressBars.forEach((bar, index) => {
+      const targetWidth = bar.style.width;
+      bar.style.width = '0%';
+      
+      setTimeout(() => {
+        bar.style.width = targetWidth;
+      }, 300 + (index * 200)); // Staggered animation
+    });
+  };
+  
+  // Call animation on page load and tab switch
+  animateBars();
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      if(tab.getAttribute('data-tab') === 'overview') {
+        setTimeout(animateBars, 100);
       }
+    });
+  });
+  
+  // Add subtle hover effects to insight items
+  const insightItems = document.querySelectorAll('.insight-item');
+  insightItems.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      const icon = item.querySelector('[data-lucide="zap"]');
+      if(icon) {
+        icon.classList.add('highlight-pulse');
+      }
+    });
+    
+    item.addEventListener('mouseleave', () => {
+      const icon = item.querySelector('[data-lucide="zap"]');
+      if(icon) {
+        icon.classList.remove('highlight-pulse');
+      }
+    });
+  });
+  
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+  
+  // Make the tabs sticky on scroll
+  const tabsContainer = document.querySelector('.tabs');
+  const tabsOffset = tabsContainer ? tabsContainer.offsetTop : 0;
+  
+  window.addEventListener('scroll', () => {
+    if(tabsContainer) {
+      if(window.scrollY > tabsOffset) {
+        tabsContainer.classList.add('sticky-tabs');
+      } else {
+        tabsContainer.classList.remove('sticky-tabs');
+      }
+    }
+  });
+  
+  // Smooth scroll to sections when clicking on focus areas
+  const focusAreaLinks = document.querySelectorAll('.focus-area-link');
+  focusAreaLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
+      
+      if(targetElement) {
+        window.scrollTo({
+          top: targetElement.offsetTop - 100,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+});
 
-      let textarea = document.querySelector(".my_textarea");
-      textarea.addEventListener("keyup", () => {
-        textarea.style.height = calcHeight(textarea.value) + "px";
-      });
+// Add the sticky class to the tabs
+document.addEventListener('DOMContentLoaded', function() {
+  const style = document.createElement('style');
+  style.textContent = `
+    .sticky-tabs {
+      position: sticky;
+      top: 70px;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+  `;
+  document.head.appendChild(style);
+});
   </script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
 </body>
 </html>
+
+

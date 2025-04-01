@@ -13,6 +13,135 @@ from sklearn.cluster import KMeans
 from .models import MyForm
 from .forms import UserUpdateForm, CustomUserSignupForm
 
+import json
+from django.shortcuts import render
+from django.conf import settings
+from django.http import JsonResponse
+import requests
+from django.views.decorators.csrf import csrf_exempt
+
+
+# @csrf_exempt
+
+
+def analyze_question_paper(text):
+    """
+    Analyze question paper text using Google's Gemini API
+    """
+    try:
+        ANALYSIS_PROMPT = """ 
+        You are an expert question paper analyzer. Your task is to analyze the following question paper text and provide insights.
+
+        Extract and analyze:
+        1. Main topics covered in the questions
+        2. Most frequently asked questions or question types
+        3. Distribution of difficulty levels (easy, medium, hard)
+        4. Key insights for students preparing for this exam
+
+        Format your response as JSON with the following structure:
+        {
+            "topics": ["topic1", "topic2", ...],
+            "frequentQuestions": ["question1", "question2", ...],
+            "difficultyDistribution": {
+                "easy": percentageValue,
+                "medium": percentageValue,
+                "hard": percentageValue
+            },
+            "keyInsights": ["insight1", "insight2", ...],
+            "detailedAnalysis": "Provide a detailed analysis of the paper here with recommendations for study strategy"
+        }
+
+        Question paper text: 
+        """
+        
+        api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+        api_key = settings.GEMINI_API_KEY
+        
+        request_body = {
+            "contents": [
+                {
+                    "parts": [
+                        {"text": ANALYSIS_PROMPT + text}
+                    ]
+                }
+            ],
+            "generationConfig": {
+                "temperature": 0.2,
+                "topK": 40,
+                "topP": 0.95,
+                "maxOutputTokens": 1024,
+            }
+        }
+        
+        response = requests.post(
+            f"{api_url}?key={api_key}",
+            headers={"Content-Type": "application/json"},
+            json=request_body
+        )
+        
+        data = response.json()
+        
+        if response.status_code != 200:
+            return {
+                "topics": [],
+                "frequentQuestions": [],
+                "difficultyDistribution": {"easy": 0, "medium": 0, "hard": 0},
+                "keyInsights": [],
+                "detailedAnalysis": "",
+                "isError": True,
+                "errorMessage": data.get("error", {}).get("message", "Failed to analyze text")
+            }
+        
+        # Extract the response text
+        generated_text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+        
+        if not generated_text:
+            return {
+                "topics": [],
+                "frequentQuestions": [],
+                "difficultyDistribution": {"easy": 0, "medium": 0, "hard": 0},
+                "keyInsights": [],
+                "detailedAnalysis": "",
+                "isError": True,
+                "errorMessage": "No analysis generated"
+            }
+        
+        # Find the JSON part in the response
+        import re
+        json_match = re.search(r'\{[\s\S]*\}', generated_text)
+        
+        if not json_match:
+            return {
+                "topics": [],
+                "frequentQuestions": [],
+                "difficultyDistribution": {"easy": 0, "medium": 0, "hard": 0},
+                "keyInsights": [],
+                "detailedAnalysis": "",
+                "isError": True,
+                "errorMessage": "Could not parse analysis result"
+            }
+        
+        result_object = json.loads(json_match.group(0))
+        
+        return {
+            "topics": result_object.get("topics", []),
+            "frequentQuestions": result_object.get("frequentQuestions", []),
+            "difficultyDistribution": result_object.get("difficultyDistribution", {"easy": 0, "medium": 0, "hard": 0}),
+            "keyInsights": result_object.get("keyInsights", []),
+            "detailedAnalysis": result_object.get("detailedAnalysis", ""),
+            "isError": False
+        }
+    
+    except Exception as e:
+        return {
+            "topics": [],
+            "frequentQuestions": [],
+            "difficultyDistribution": {"easy": 0, "medium": 0, "hard": 0},
+            "keyInsights": [],
+            "detailedAnalysis": "",
+            "isError": True,
+            "errorMessage": str(e)
+        }
 
 
 def textResponse(request):
@@ -40,11 +169,21 @@ def textResponse(request):
         ocr_text = "\n".join(parsed_text).strip()
 
         if not ocr_text:
-            return custom_error_view(request)  # Show 500 error if no text extracted
+            return custom_error_view(request) 
 
         clustered_text = cluster_text(ocr_text)
 
-        return render(request, "result.html", {"clustered_text": clustered_text})
+        
+        # Analyze the text using Gemini API
+        analysis_result = analyze_question_paper(ocr_text)
+        
+    
+        
+        return render(request, "result.html", {
+            "original_text": ocr_text,
+            "clustered_text": clustered_text,
+            "analysis_result": analysis_result
+        })
 
     return custom_bad_request_view(request)  # Show 400 error if invalid request
 
